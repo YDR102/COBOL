@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
       *
-       PROGRAM-ID.  VALSNMAP.
+       PROGRAM-ID.  VALCNMAP.
        AUTHOR.      DAVID.
-       DATE-WRITTEN 13/06/2025.
+       DATE-WRITTEN 16/06/2025.
       *
        ENVIRONMENT DIVISION.
       *
@@ -29,19 +29,19 @@
       *
        FD ENTRADA1
            RECORDING MODE IS F.
-       01  REG-ENTRADA1                                     PIC X(0043).
+       01  REG-ENTRADA1                                     PIC X(2530).
       *
        FD ENTRADA2
            RECORDING MODE IS F.
-       01  REG-ENTRADA2                                     PIC X(2530).
+       01  REG-ENTRADA2                                     PIC X(688).
       *
        FD FSALIDA
            RECORDING MODE IS F.
-       01  REG-FSALIDA                                      PIC X(2530).
+       01  REG-FSALIDA                                      PIC X(688).
       *
        FD DESCARTE
            RECORDING MODE IS F.
-       01  REG-DESCARTE                                     PIC X(2530).
+       01  REG-DESCARTE                                     PIC X(688).
       *
        WORKING-STORAGE SECTION.
       *
@@ -77,7 +77,7 @@
       *COPY DEL FICHERO DE ENTRADA ENTRADA1
       *
       *COPY CLAVE1
-       COPY CPYCOMFI.
+       COPY CPYCLISA.
       *
       *COPY DEL FICHERO DE ENTRADA ENTRADA2
       *
@@ -110,8 +110,8 @@
       *
            INITIALIZE FS-FILE-STATUS
                       CN-CONTADORES
-                      DATOS-COM
                       DATOS-SEG
+                      CPYCLISA
       *
            SET SW-NO-FIN-ENTRADA1               TO TRUE
            SET SW-NO-FIN-ENTRADA2               TO TRUE
@@ -221,7 +221,7 @@
       *
        2100-ESCRIBIR-FSALIDA.
       *
-           WRITE REG-FSALIDA        FROM DATOS-SEG
+           WRITE REG-FSALIDA        FROM CPYCLISA
       *
            IF FS-FSALIDA NOT = CT-00
               DISPLAY 'ERROR AL ESCRIBIR FSALIDA'
@@ -231,7 +231,7 @@
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            ELSE
-              INITIALIZE DATOS-SEG
+              INITIALIZE CPYCLISA
               ADD CT-1                 TO CN-REG-ESCRIT-FSALIDA
            END-IF
       *
@@ -246,7 +246,7 @@
       *
        2200-ESCRIBIR-DESCARTE.
       *
-           WRITE REG-DESCARTE        FROM DATOS-SEG
+           WRITE REG-DESCARTE        FROM CPYCLISA
       *
            IF FS-DESCARTE NOT = CT-00
               DISPLAY 'ERROR AL ESCRIBIR DESCARTES'
@@ -256,7 +256,7 @@
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            ELSE
-              INITIALIZE DATOS-SEG
+              INITIALIZE CPYCLISA
               ADD CT-1                 TO CN-REG-ESCRIT-DESCARTES
            END-IF
       *
@@ -349,12 +349,12 @@
       *
        9000-LEER-ENTRADA1.
       *
-           READ ENTRADA1 INTO DATOS-COM
+           READ ENTRADA1 INTO DATOS-SEG
       *
            EVALUATE FS-ENTRADA1
                WHEN CT-00
                     ADD CT-1                TO CN-REG-LEIDOS-ENTRADA1
-                    MOVE NUMERO-POLIZA-COM  TO CLAVE1
+                    MOVE DNI-CL-SEG         TO CLAVE1
                WHEN CT-10
                     MOVE HIGH-VALUES        TO CLAVE1
                     SET SW-SI-FIN-ENTRADA1  TO TRUE
@@ -378,12 +378,12 @@
       *
        9100-LEER-ENTRADA2.
       *
-           READ ENTRADA2 INTO DATOS-SEG
+           READ ENTRADA2 INTO CPYCLISA
       *
            EVALUATE FS-ENTRADA2
                WHEN CT-00
                     ADD CT-1               TO CN-REG-LEIDOS-ENTRADA2
-                    MOVE NUMERO-POLIZA-SEG TO CLAVE2
+                    MOVE DNI-CL-S          TO CLAVE2
                WHEN CT-10
                     MOVE HIGH-VALUES       TO CLAVE2
                     SET SW-SI-FIN-ENTRADA2 TO TRUE
