@@ -52,8 +52,8 @@
            05  FS-DESCARTE                         PIC X(02).
       *
        01  WK-VARIABLES.
-           05 CLAVE1                               PIC X(05).
-           05 CLAVE2                               PIC X(05).
+           05 CLAVE1                               PIC X(09).
+           05 CLAVE2                               PIC X(09).
       *
        01  CN-CONTADORES.
            05  CN-REG-LEIDOS-ENTRADA1              PIC 9(03).
@@ -77,18 +77,13 @@
       *
       *COPY DEL FICHERO DE ENTRADA ENTRADA1
       *
-      *COPY MAT1A1E1
+      *COPY CLAVE1
        COPY CPYCOMFI.
       *
       *COPY DEL FICHERO DE ENTRADA ENTRADA2
       *
-      *COPY MAT1A1E2
+      *COPY CLAVE2
        COPY CPYSEGFI.
-      *
-      *COPY DEL FICHERO DE ENTRADA FSALIDA
-      *
-      *COPY MAT1A1S
-       COPY VALCYMAP.
       *
       ******************************************************************
       ** PROCEDURE DIVISION                                           **
@@ -101,7 +96,7 @@
       *
            PERFORM 2000-PROCESO
               THRU 2000-PROCESO-EXIT
-             UNTIL SW-SI-FIN-ENTRADA1 OR SW-SI-FIN-ENTRADA2
+             UNTIL SW-SI-FIN-ENTRADA1 AND SW-SI-FIN-ENTRADA2
       *
            PERFORM 3000-FIN
               THRU 3000-FIN-EXIT
@@ -118,15 +113,16 @@
                       CN-CONTADORES
                       DATOS-COM
                       DATOS-SEG
-                      DATOS-VAL
       *
            SET SW-NO-FIN-ENTRADA1               TO TRUE
            SET SW-NO-FIN-ENTRADA2               TO TRUE
       *
            PERFORM 1100-ABRIR-FICHEROS
               THRU 1100-ABRIR-FICHEROS-EXIT
+
            PERFORM 9000-LEER-ENTRADA1
               THRU 9000-LEER-ENTRADA1-EXIT
+
            PERFORM 9100-LEER-ENTRADA2
               THRU 9100-LEER-ENTRADA2-EXIT
       *
@@ -189,107 +185,13 @@
       *
       ******************************************************************
       * 2000-PROCESO                                                   *
-      *                                                                *
-      *    Leer ambos ficheros simultáneamente                         *
-      *    Verificar si los códigos de empleado coinciden              *
-      *    Generar un registro en el informe con el resultado          *
-      *    Terminar cuando uno de los ficheros llegue a fin            *
       ******************************************************************
       *
        2000-PROCESO.
       *
-           PERFORM 2400-MATCHING
-              THRU 2400-MATCHING-EXIT
-      *
-           .
-      *
-       2000-PROCESO-EXIT.
-           EXIT.
-      *
-      ******************************************************************
-      * 2100-INFORMAR-SALIDA                                           *
-      ******************************************************************
-      *
-       2100-INFORMAR-SALIDA.
-      *
-           MOVE NUMERO-POLIZA-SEG      TO NUMERO-POLIZA-VAL1
-           MOVE TIPO-SEG               TO TIPO-VAL1
-           MOVE FECHA-INICIO-SEG       TO FECHA-INICIO-VAL1
-           MOVE FECHA-VENCIMIENTO-SEG  TO FECHA-VENCIMIENTO-VAL1
-           MOVE COND-PART-SEG          TO COND-PART-VAL1
-           MOVE OBSERVACIONES-SEG      TO OBSERVACIONES-VAL1
-           MOVE DNI-CL-SEG             TO DNI-CL-VAL1
-      *
-           .
-      *
-       2100-INFORMAR-SALIDA-EXIT.
-           EXIT.
-      *
-      ******************************************************************
-      * 2200-ESCRIBIR-FSALIDA                                          *
-      ******************************************************************
-      *
-       2200-ESCRIBIR-FSALIDA.
-      *
-           WRITE REG-FSALIDA        FROM DATOS-VAL
-      *
-           IF FS-FSALIDA NOT = CT-00
-              DISPLAY 'ERROR AL ESCRIBIR FSALIDA'
-              DISPLAY 'PARRAFO: 2200-ESCRIBIR-FSALIDA'
-              DISPLAY 'FILE STATUS: ' FS-FSALIDA
-      *
-              PERFORM 3000-FIN
-                 THRU 3000-FIN-EXIT
-           ELSE
-              INITIALIZE DATOS-VAL
-              ADD CT-1                 TO CN-REG-ESCRIT-FSALIDA
-           END-IF
-      *
-           .
-      *
-       2200-ESCRIBIR-FSALIDA-EXIT.
-           EXIT.
-      *
-      ******************************************************************
-      * 2300-ESCRIBIR-DESCARTE                                         *
-      ******************************************************************
-      *
-       2300-ESCRIBIR-DESCARTE.
-      *
-           WRITE REG-DESCARTE        FROM DATOS-VAL
-      *
-           IF FS-DESCARTE NOT = CT-00
-              DISPLAY 'ERROR AL ESCRIBIR DESCARTES'
-              DISPLAY 'PARRAFO: 2200-ESCRIBIR-DESCARTE'
-              DISPLAY 'FILE STATUS: ' FS-DESCARTE
-      *
-              PERFORM 3000-FIN
-                 THRU 3000-FIN-EXIT
-           ELSE
-              INITIALIZE DATOS-VAL
-              ADD CT-1                 TO CN-REG-ESCRIT-DESCARTES
-           END-IF
-      *
-           .
-      *
-       2300-ESCRIBIR-DESCARTE-EXIT.
-           EXIT.
-      *
-      ******************************************************************
-      * 2400-MATCHING                                          *
-      ******************************************************************
-      *
-       2400-MATCHING.
-      *
            IF CLAVE1 = CLAVE2
-              PERFORM 2100-INFORMAR-SALIDA
-                 THRU 2100-INFORMAR-SALIDA-EXIT
-      *
-              PERFORM 2200-ESCRIBIR-FSALIDA
-                 THRU 2200-ESCRIBIR-FSALIDA-EXIT
-      *
-              PERFORM 9000-LEER-ENTRADA1
-                 THRU 9000-LEER-ENTRADA1-EXIT
+              PERFORM 2100-ESCRIBIR-FSALIDA
+                 THRU 2100-ESCRIBIR-FSALIDA-EXIT
       *
               PERFORM 9100-LEER-ENTRADA2
                  THRU 9100-LEER-ENTRADA2-EXIT
@@ -300,8 +202,6 @@
                     THRU 9000-LEER-ENTRADA1-EXIT
               ELSE
                  DISPLAY 'CLAVE2 NO EXISTE EN FICHERO1'
-                 PERFORM 2100-INFORMAR-SALIDA
-                    THRU 2100-INFORMAR-SALIDA-EXIT
 
                  PERFORM 2300-ESCRIBIR-DESCARTE
                     THRU 2300-ESCRIBIR-DESCARTE-EXIT
@@ -313,7 +213,57 @@
       *
            .
       *
-       2400-MATCHING-EXIT.
+       2000-PROCESO-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      * 2100-ESCRIBIR-FSALIDA                                          *
+      ******************************************************************
+      *
+       2100-ESCRIBIR-FSALIDA.
+      *
+           WRITE REG-FSALIDA        FROM DATOS-SEG
+      *
+           IF FS-FSALIDA NOT = CT-00
+              DISPLAY 'ERROR AL ESCRIBIR FSALIDA'
+              DISPLAY 'PARRAFO: 2100-ESCRIBIR-FSALIDA'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           ELSE
+              INITIALIZE DATOS-SEG
+              ADD CT-1                 TO CN-REG-ESCRIT-FSALIDA
+           END-IF
+      *
+           .
+      *
+       2100-ESCRIBIR-FSALIDA-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      * 2300-ESCRIBIR-DESCARTE                                         *
+      ******************************************************************
+      *
+       2300-ESCRIBIR-DESCARTE.
+      *
+           WRITE REG-DESCARTE        FROM DATOS-SEG
+      *
+           IF FS-DESCARTE NOT = CT-00
+              DISPLAY 'ERROR AL ESCRIBIR DESCARTES'
+              DISPLAY 'PARRAFO: 2200-ESCRIBIR-DESCARTE'
+              DISPLAY 'FILE STATUS: ' FS-DESCARTE
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           ELSE
+              INITIALIZE DATOS-SEG
+              ADD CT-1                 TO CN-REG-ESCRIT-DESCARTES
+           END-IF
+      *
+           .
+      *
+       2300-ESCRIBIR-DESCARTE-EXIT.
            EXIT.
       *
       ******************************************************************
@@ -403,10 +353,11 @@
       *
            EVALUATE FS-ENTRADA1
                WHEN CT-00
-                    ADD CT-1               TO CN-REG-LEIDOS-ENTRADA1
+                    ADD CT-1                TO CN-REG-LEIDOS-ENTRADA1
                     MOVE NUMERO-POLIZA-COM  TO CLAVE1
                WHEN CT-10
-                    SET SW-SI-FIN-ENTRADA1 TO TRUE
+                    MOVE HIGH-VALUES        TO CLAVE1
+                    SET SW-SI-FIN-ENTRADA1  TO TRUE
                WHEN OTHER
                     DISPLAY 'ERROR AL ABRIR EL FICHERO ENTRADA1'
                     DISPLAY 'PARRAFO: 9000-LEER-ENTRADA1'
@@ -434,6 +385,7 @@
                     ADD CT-1               TO CN-REG-LEIDOS-ENTRADA2
                     MOVE NUMERO-POLIZA-SEG TO CLAVE2
                WHEN CT-10
+                    MOVE HIGH-VALUES       TO CLAVE2
                     SET SW-SI-FIN-ENTRADA2 TO TRUE
                WHEN OTHER
                     DISPLAY 'ERROR AL ABRIR EL FICHERO ENTRADA2'
