@@ -81,7 +81,7 @@
                   SELECT ID,
                          NUMERO_POLIZA,
                          NOMBRE_COMPANIA
-                    FROM COMPANIAS-SEGUROS
+                    FROM COMPANIAS_SEGUROS
                     ORDER BY ID
            END-EXEC.
       *
