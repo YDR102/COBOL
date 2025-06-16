@@ -78,12 +78,12 @@
       *COPY DEL FICHERO DE ENTRADA ENTRADA1
       *
       *COPY MAT1A1E1
-       COPY VALCOMFI.
+       COPY CPYCOMFI.
       *
       *COPY DEL FICHERO DE ENTRADA ENTRADA2
       *
       *COPY MAT1A1E2
-       COPY VALSEGFI.
+       COPY CPYSEGFI.
       *
       *COPY DEL FICHERO DE ENTRADA FSALIDA
       *
@@ -116,8 +116,8 @@
       *
            INITIALIZE FS-FILE-STATUS
                       CN-CONTADORES
-                      ENTRADA-COM
-                      ENTRADA-SEG
+                      DATOS-COM
+                      DATOS-SEG
                       SALIDA
       *
            SET SW-NO-FIN-ENTRADA1               TO TRUE
@@ -212,13 +212,13 @@
       *
        2100-INFORMAR-SALIDA.
       *
-           MOVE NUMERO-POLIZA-E2      TO NUMERO-POLIZA-S
-           MOVE TIPO-E2               TO TIPO-S
-           MOVE FECHA-INICIO-E2       TO FECHA-INICIO-S
-           MOVE FECHA-VENCIMIENTO-E2  TO FECHA-VENCIMIENTO-S
-           MOVE COND-PART-E2          TO COND-PART-S
-           MOVE OBSERVACIONES-E2      TO OBSERVACIONES-S
-           MOVE DNI-CL-E2             TO DNI-CL-S
+           MOVE NUMERO-POLIZA-SEG      TO NUMERO-POLIZA-VAL1
+           MOVE TIPO-SEG               TO TIPO-VAL1
+           MOVE FECHA-INICIO-SEG       TO FECHA-INICIO-VAL1
+           MOVE FECHA-VENCIMIENTO-SEG  TO FECHA-VENCIMIENTO-VAL1
+           MOVE COND-PART-SEG          TO COND-PART-VAL1
+           MOVE OBSERVACIONES-SEG      TO OBSERVACIONES-VAL1
+           MOVE DNI-CL-SEG             TO DNI-CL-VAL1
       *
            .
       *
@@ -399,12 +399,12 @@
       *
        9000-LEER-ENTRADA1.
       *
-           READ ENTRADA1 INTO ENTRADA-COM
+           READ ENTRADA1 INTO DATOS-COM
       *
            EVALUATE FS-ENTRADA1
                WHEN CT-00
                     ADD CT-1               TO CN-REG-LEIDOS-ENTRADA1
-                    MOVE NUMERO-POLIZA-E1  TO CLAVE1
+                    MOVE NUMERO-POLIZA-COM  TO CLAVE1
                WHEN CT-10
                     SET SW-SI-FIN-ENTRADA1 TO TRUE
                WHEN OTHER
@@ -427,12 +427,12 @@
       *
        9100-LEER-ENTRADA2.
       *
-           READ ENTRADA2 INTO ENTRADA-SEG
+           READ ENTRADA2 INTO DATOS-SEG
       *
            EVALUATE FS-ENTRADA2
                WHEN CT-00
                     ADD CT-1               TO CN-REG-LEIDOS-ENTRADA2
-                    MOVE NUMERO-POLIZA-E2  TO CLAVE2
+                    MOVE NUMERO-POLIZA-SEG TO CLAVE2
                WHEN CT-10
                     SET SW-SI-FIN-ENTRADA2 TO TRUE
                WHEN OTHER
