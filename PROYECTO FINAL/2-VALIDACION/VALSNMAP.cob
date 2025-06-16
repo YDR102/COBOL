@@ -118,7 +118,7 @@
                       CN-CONTADORES
                       DATOS-COM
                       DATOS-SEG
-                      SALIDA
+                      DATOS-VAL
       *
            SET SW-NO-FIN-ENTRADA1               TO TRUE
            SET SW-NO-FIN-ENTRADA2               TO TRUE
@@ -231,7 +231,7 @@
       *
        2200-ESCRIBIR-FSALIDA.
       *
-           WRITE REG-FSALIDA        FROM SALIDA
+           WRITE REG-FSALIDA        FROM DATOS-VAL
       *
            IF FS-FSALIDA NOT = CT-00
               DISPLAY 'ERROR AL ESCRIBIR FSALIDA'
@@ -241,7 +241,7 @@
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            ELSE
-              INITIALIZE SALIDA
+              INITIALIZE DATOS-VAL
               ADD CT-1                 TO CN-REG-ESCRIT-FSALIDA
            END-IF
       *
@@ -256,7 +256,7 @@
       *
        2300-ESCRIBIR-DESCARTE.
       *
-           WRITE REG-DESCARTE        FROM SALIDA
+           WRITE REG-DESCARTE        FROM DATOS-VAL
       *
            IF FS-DESCARTE NOT = CT-00
               DISPLAY 'ERROR AL ESCRIBIR DESCARTES'
@@ -266,7 +266,7 @@
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            ELSE
-              INITIALIZE SALIDA
+              INITIALIZE DATOS-VAL
               ADD CT-1                 TO CN-REG-ESCRIT-DESCARTES
            END-IF
       *

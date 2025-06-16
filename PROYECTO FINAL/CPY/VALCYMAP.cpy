@@ -1,4 +1,4 @@
-       01 SALIDA.
+       01 DATOS-VAL.
            05 NUMERO-POLIZA-VAL1         PIC X(9).
            05 TIPO-VAL1                  PIC X(2).
            05 FECHA-INICIO-VAL1          PIC X(10).
