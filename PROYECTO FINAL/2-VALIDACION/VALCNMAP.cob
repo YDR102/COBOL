@@ -29,7 +29,7 @@
       *
        FD ENTRADA1
            RECORDING MODE IS F.
-       01  REG-ENTRADA1                                     PIC X(2530).
+       01  REG-ENTRADA1                                     PIC X(2540).
       *
        FD ENTRADA2
            RECORDING MODE IS F.
