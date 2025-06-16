@@ -1,0 +1,106 @@
+REPOSICIONAMIENTO.-
+
+INICIO.-
+
+INICILIZAMOS VARIABLES, COPYS, SWITHCES
+
+ABRIR-FICHEROS
+
+CONSULTAR-DAREPOS
+
+
+CONSULTAR-DAREPOS.-
+
+SELECT DAREPOS por PGM, para recuperar ESTADO, CLAVE
+
+EVALUAR SQLCODE
+ 	Cuando es 0
+		Evaluar ESTADO
+			Cuando es KO
+				Releer FICHERO-ENTRADA hasta CLAVE del FENTRADA > CLAVE-DAREPOS
+			Cuando es OK
+				Leer FICHERO-ENTRADA
+		Fin-Evaluar
+	Cuando es 100
+		INSERTAR-DAREPOS
+		Leer FICHERO-ENTRADA
+	Cuando es OTRO
+		ERROR
+		FIN
+Fin-Evaluar
+
+INSERT-DAREPOS.-
+
+INSERT DAREPOS con ESTADO = 'KO', CLAVE-TEXT = vacía
+
+EVALUAR SQLCODE
+	Cuando es 0
+		Continuamos
+	Cuando -803
+		ERROR (REG. DUPLICADO)
+		FIN
+	Cuando es OTRO
+		ERROR
+		FIN
+Fin-Evaluar
+
+PROCESO.-
+
+INSERT-TABLA (MUNDIAL)
+
+Evaluar SQLCODE
+	Cuando 0
+		Continuar
+	Cuando -803 (Reg. Duplicado)
+		Escribir Fich. Incidencias
+	Cuando Otro
+		ERROR
+		FIN
+Fin-Evaluar
+
+UPDATE-DAREPOS
+
+Leer FICHERO-ENTRADA
+
+
+UPDATE-DAREPOS.-
+
+Update DAREPOS con ESTADO = 'KO', CLAVE-TEXT = Clave REG. LEIDO
+
+Evaluar SQLCODE
+
+EXEC SQL
+	COMMIT
+END-EXEC
+
+Leer FICHERO-ENTRADA.-
+
+READ FENTRADA INTO XXXXX
+
+Evaluar FS-FENTRADA
+	Cuando '00'
+		MOVER CLAVE A WK-CLAVE-FENTRADA (Clave del FENTRADA)
+		AÑADIR 1  AL CN-REG-LEIDOS-FENTRADA
+	Cuando '10'
+		Activar SW-SI-FIN-FENTRADA
+		UPDATE-DAREPOS-OK	
+	Cuando OTRO
+		ERROR
+		FIN
+Fin-Evaluar
+
+
+UPDATE-DAREPOS-OK.-
+
+Update DAREPOS con ESTADO = 'OK', CLAVE-TEXT = vacía
+
+Evaluar SQLCODE
+
+
+FIN.-
+
+CERRAR-FICHEROS
+
+MOSTRAR-ESTADISTICOS
+
+STOP RUN.

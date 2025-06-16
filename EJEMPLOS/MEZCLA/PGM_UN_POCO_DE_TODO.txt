@@ -1,0 +1,502 @@
+      ******************************************************************
+      ** E J P G M C 0 1.-PGM QUE A PARTIR DE UN FICHERO DE ENTRADA   **
+      **                  CON CLIENTES, RECUPERA TODAS LAS DIRECCIONES**
+      **                  ELECTRONICAS (FAX, WWW, MAIL, TLF FIJO, TLF **
+      **                  MOVIL) ASOCIADAS A DICHO CLIENTE Y LAS      **
+      **                  ESCRIBE EN EL FICHERO DE SALIDA. SI EL TIPO **
+      **                  DE DIRECCION ELECTRONICA ES UN TLF FIJO     **
+      **                  ADEMAS SE OBTENDRA LA PROVINCIA ASOCIADA AL **
+      **                  TLF A TRAVES DE LA LLAMADA A LA RUTINA      **
+      **                  EJRUTC01.                                   **
+      ******************************************************************
+      *
+      ******************************************************************
+      ** IDENTIFICATION DIVISION                                      **
+      ******************************************************************
+      *
+       IDENTIFICATION DIVISION.
+      *
+       PROGRAM-ID. EJPGMC01.
+       AUTHOR. CRISTIAN.
+       INSTALLATION. EOI.
+       DATE-WRITTEN. 26/05/2025.
+      *
+      ******************************************************************
+      ** ENVIRONMENT DIVISION                                         **
+      ******************************************************************
+      *
+       ENVIRONMENT DIVISION.
+      *
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           DECIMAL-POINT IS COMMA.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT FENTRADA ASSIGN TO FENTRADA
+           FILE STATUS FS-FENTRADA.
+      *
+           SELECT FSALIDA ASSIGN TO FSALIDA
+           FILE STATUS FS-FSALIDA.
+      *
+      ******************************************************************
+      ** DATA DIVISION                                                **
+      ******************************************************************
+      *
+       DATA DIVISION.
+      *
+       FILE SECTION.
+      *
+       FD FENTRADA
+           RECORDING MODE IS F.
+       01  REG-FENTRADA               PIC X(68).
+      *
+       FD FSALIDA
+           RECORDING MODE IS F.
+       01  REG-FSALIDA                PIC X(114).
+      *
+       WORKING-STORAGE SECTION.
+      *
+       01  FS-FILE-STATUS.
+           05  FS-FENTRADA            PIC X(02).
+           05  FS-FSALIDA             PIC X(02).
+      *
+       01  CA-CONSTANTES.
+           05  CA-RUTINA              PIC X(08) VALUE 'EJRUTC01'.
+      *
+       01  CN-CONTADORES.
+           05  CN-REG-LEIDOS-FENTRADA PIC 9(03).
+           05  CN-REG-ESCRIT-FSALIDA  PIC 9(03).
+      *
+       01  SW-SWITCHES.
+           05  SW-FIN-FENTRADA        PIC X(01).
+               88  SW-SI-FIN-FENTRADA VALUE 'S'.
+               88  SW-NO-FIN-FENTRADA VALUE 'N'.
+           05  SW-FIN-CURSOR          PIC X(01).
+               88  SW-SI-FIN-CURSOR   VALUE 'S'.
+               88  SW-NO-FIN-CURSOR   VALUE 'N'.
+      *
+      *COPY DEL FICHERO DE ENTRADA FENTRADA
+      *
+       COPY CPYDIREI.
+      *
+      *COPY DEL FICHERO DE SALIDA FSALIDA
+      *
+       COPY CPYDIREO.
+      *
+      *COPY DE LA RUTINA EJRUTC01
+      *
+       COPY CPYRUTPV.
+      *
+      *-----------------SQLCA---------------*
+      *
+           EXEC SQL
+              INCLUDE SQLCA
+           END-EXEC.
+      *
+      *--------------DCLGEN DIRELEC---------*
+      *
+           EXEC SQL
+              INCLUDE TBDIRELE
+           END-EXEC.
+      *
+      *
+      *----------DEFINIMOS LOS CURSORES-----*
+      *
+           EXEC SQL
+              DECLARE CURSOR-DIRELEC CURSOR FOR
+                SELECT TIPO_DIR_ELEC
+                      ,VALOR
+                  FROM DIRELEC
+                 WHERE COD_CLIENTE = :TB-COD-CLIENTE
+           END-EXEC.
+      *
+      ******************************************************************
+      ** PROCEDURE DIVISION                                           **
+      ******************************************************************
+      *
+       PROCEDURE DIVISION.
+      *
+           PERFORM 1000-INICIO
+              THRU 1000-INICIO-EXIT
+      *
+           PERFORM 2000-PROCESO
+              THRU 2000-PROCESO-EXIT
+             UNTIL SW-SI-FIN-FENTRADA
+      *
+           PERFORM 3000-FIN
+              THRU 3000-FIN-EXIT
+      *
+           .
+      *
+      ******************************************************************
+      ** 1000-INICIO                                                  **
+      ** INICIALIZAR VARIABLES                                        **
+      ** APERTURA DE FICHEROS                                         **
+      ******************************************************************
+      *
+       1000-INICIO.
+      *
+           INITIALIZE FS-FILE-STATUS
+                      CN-CONTADORES
+                      CPY-CPYDIREI
+                      CPY-CPYDIREO
+                      CPY-CPYRUTPV
+      *
+           SET SW-NO-FIN-FENTRADA        TO TRUE
+      *
+           PERFORM 1100-ABRIR-FICHEROS
+              THRU 1100-ABRIR-FICHEROS-EXIT
+      *
+           PERFORM 9000-LEER-FENTRADA
+              THRU 9000-LEER-FENTRADA-EXIT
+      *
+           .
+      *
+       1000-INICIO-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 1100-ABRIR-FICHEROS                                          **
+      ** ABRIMOS LOS FICHEROS DE ENTRADA Y SALIDA COMPROBANDO SU      **
+      ** FILE STATUS.                                                 **
+      ******************************************************************
+      *
+       1100-ABRIR-FICHEROS.
+      *
+           OPEN INPUT  FENTRADA
+                OUTPUT FSALIDA
+      *
+           IF FS-FENTRADA NOT = '00'
+              DISPLAY 'ERROR AL ABRIR EL FICHERO FENTRADA'
+              DISPLAY 'PARRAFO: 1100-ABRIR-FICHEROS'
+              DISPLAY 'NOMBRE FICHERO: FENTRADA'
+              DISPLAY 'FILE STATUS: ' FS-FENTRADA
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           END-IF
+      *
+           IF FS-FSALIDA NOT = '00'
+      *
+              DISPLAY 'ERROR AL ABRIR EL FICHERO FSALIDA'
+              DISPLAY 'PARRAFO: 1100-ABRIR-FICHEROS'
+              DISPLAY 'NOMBRE FICHERO: FSALIDA'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           END-IF
+      *
+           .
+      *
+       1100-ABRIR-FICHEROS-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 2000-PROCESO                                                 **
+      ** ABRIMOS EL CURSOR POR CADA REGISTRO LEIDO DEL FICHERO DE     **
+      ** ENTRADA. A CONTINUACION LEEMOS MEDIANTE EL FETCH TODAS LAS   **
+      ** DIRECCIONES ELECTRONICAS DEL CLIENTE PARA PODER ESCRIBIRLAS  **
+      ** EN EL FICHERO DE SALIDA. A CONTINUACION LEEMOS UN NUEVO      **
+      ** REGISTRO DEL FICHERO DE ENTRADA.                             **
+      ******************************************************************
+      *
+       2000-PROCESO.
+      *
+           PERFORM 2100-ABRIR-CURSOR
+              THRU 2100-ABRIR-CURSOR-EXIT
+      *
+           PERFORM 2200-LEER-CURSOR
+              THRU 2200-LEER-CURSOR-EXIT
+             UNTIL SW-SI-FIN-CURSOR
+      *
+           PERFORM 2300-CERRAR-CURSOR
+              THRU 2300-CERRAR-CURSOR-EXIT
+      *
+           PERFORM 9000-LEER-FENTRADA
+              THRU 9000-LEER-FENTRADA-EXIT
+      *
+           .
+      *
+       2000-PROCESO-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 2100-ABRIR-CURSOR                                            **
+      ** ABRIMOS EL CURSOR DE DIRELEC CONTROLANDO SU CORRESPONDIENTE  **
+      ** SQLCODE.                                                     **
+      ******************************************************************
+      *
+       2100-ABRIR-CURSOR.
+      *
+           SET SW-NO-FIN-CURSOR               TO TRUE
+      *
+           MOVE COD-CLIENTE-IN                TO TB-COD-CLIENTE
+      *
+           EXEC SQL
+              OPEN CURSOR-DIRELEC
+           END-EXEC
+      *
+           EVALUATE SQLCODE
+               WHEN 0
+                    CONTINUE
+               WHEN OTHER
+                    DISPLAY 'ERROR AL ABRIR CURSOR CURSOR-DIRELEC'
+                    DISPLAY 'TABLA: DIRELEC'
+                    DISPLAY 'PARRAFO: 2100-ABRIR-CURSOR'
+                    DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 3000-FIN
+                       THRU 3000-FIN-EXIT
+           END-EVALUATE
+      *
+           .
+      *
+       2100-ABRIR-CURSOR-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 2200-LEER-CURSOR                                             **
+      ** LEEMOS TODOS LOS REGISTROS DEVUELTOS POR LA SELECT QUE SE HA **
+      ** EJECUTADO EN EL OPEN DEL CURSOR CONTROLANDO SU CORRESPONDIENTE*
+      ** SQLCODE.                                                     **
+      ******************************************************************
+      *
+       2200-LEER-CURSOR.
+      *
+           EXEC SQL
+              FETCH CURSOR-DIRELEC
+               INTO :TB-TIPO-DIR-ELEC
+                   ,:TB-VALOR
+           END-EXEC
+      *
+           EVALUATE SQLCODE
+               WHEN 0
+                    IF TB-TIPO-DIR-ELEC = 'TLF'
+                       PERFORM 2210-LLAMAR-RUTINA
+                          THRU 2210-LLAMAR-RUTINA-EXIT
+      *
+                       PERFORM 2220-ESCRIBIR-FSALIDA
+                          THRU 2220-ESCRIBIR-FSALIDA-EXIT
+                    ELSE
+                       PERFORM 2220-ESCRIBIR-FSALIDA
+                          THRU 2220-ESCRIBIR-FSALIDA-EXIT
+                    END-IF
+      *
+               WHEN 100
+                    SET SW-SI-FIN-CURSOR           TO TRUE
+               WHEN OTHER
+                    DISPLAY 'ERROR AL LEER CURSOR CURSOR-DIRELEC'
+                    DISPLAY 'TABLA: DIRELEC'
+                    DISPLAY 'PARRAFO: 2200-LEER-CURSOR'
+                    DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 3000-FIN
+                       THRU 3000-FIN-EXIT
+           END-EVALUATE
+      *
+           .
+      *
+       2200-LEER-CURSOR-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 2210-LLAMAR-RUTINA                                           **
+      ** LLAMAMOS A LA RUTINA DE PROVINCIAS PARA RECUPEAR LA PROVINCIA**
+      ** A PARTIR DEL PREFIJO DEL TLF.                                **
+      ******************************************************************
+      *
+       2210-LLAMAR-RUTINA.
+      *
+           MOVE TB-VALOR(1:2)               TO PREFIJO-E
+      *
+           CALL CA-RUTINA USING CPY-CPYRUTPV
+      *
+           EVALUATE RETORNO-ERR
+               WHEN '00'
+                    MOVE PREFIJO-E          TO PREFIJO-TLF-OUT
+                    MOVE PROVINCIA-S        TO PROVINCIA-TLF-OUT
+               WHEN OTHER
+                    DISPLAY 'RETORNO-RUT    : ' RETORNO-ERR
+                    DISPLAY 'SUBRETORNO-RUT : ' SUBRETORNO-ERR
+                    DISPLAY 'NOMBRE-RUT     : EJRUTC01'
+                    DISPLAY 'PARRAFO-RUT    : ' PARRAFO-ERR
+                    DISPLAY 'DESCRIPCION-RUT: ' DESCRIPCION-ERR
+                    DISPLAY 'ELEMENTO-RUT   : ' CAMPO-ERR
+                    DISPLAY 'SQLCODE-RUT    : ' SQLCODE-ERR
+      *
+                    PERFORM 3000-FIN
+                       THRU 3000-FIN-EXIT
+           END-EVALUATE
+      *
+           .
+      *
+       2210-LLAMAR-RUTINA-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 2220-ESCRIBIR-FSALIDA                                        **
+      ** ESCRIBIREMOS EL REGISTRO DE SALIDA EN EL FICHERO EVALUANDO   **
+      ** POSTERIORMENTE SU FILE STATUS.                               **
+      ******************************************************************
+      *
+       2220-ESCRIBIR-FSALIDA.
+      *
+           MOVE COD-CLIENTE-IN         TO COD-CLIENTE-OUT
+           MOVE NIF-CLIENTE-IN         TO NIF-CLIENTE-OUT
+           MOVE NOMBRE-CLIENTE-IN      TO NOMBRE-CLIENTE-OUT
+           MOVE APELLIDOS-CLIENTE-IN   TO APELLIDOS-CLIENTE-OUT
+           MOVE TB-TIPO-DIR-ELEC       TO TIPO-DIREC-ELEC-OUT
+           MOVE TB-VALOR               TO VALOR-DIREC-ELEC-OUT
+      *
+           WRITE REG-FSALIDA FROM CPY-CPYDIREO
+      *
+           IF FS-FSALIDA NOT = '00'
+              DISPLAY 'ERROR AL ESCRIBIR EL FICHERO FSALIDA'
+              DISPLAY 'PARRAFO: 2220-ESCRIBIR-FSALIDA'
+              DISPLAY 'NOMBRE FICHERO: FSALIDA'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           ELSE
+              INITIALIZE CPY-CPYDIREO
+              ADD 1                TO CN-REG-ESCRIT-FSALIDA
+           END-IF
+      *
+           .
+      *
+       2220-ESCRIBIR-FSALIDA-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 2300-CERRAR-CURSOR                                           **
+      ** CERRAMOS EL CURCSOR DE DIRELEC CONTROLANDO SU CORRESPONDIENTE**
+      ** SQLCODE.                                                     **
+      ******************************************************************
+      *
+       2300-CERRAR-CURSOR.
+      *
+           EXEC SQL
+              CLOSE CURSOR-DIRELEC
+           END-EXEC
+      *
+           EVALUATE SQLCODE
+               WHEN 0
+                    CONTINUE
+               WHEN OTHER
+                    DISPLAY 'ERROR AL CERRAR CURSOR CURSOR-DIRELEC'
+                    DISPLAY 'TABLA: DIRELEC'
+                    DISPLAY 'PARRAFO: 2300-CERRAR-CURSOR'
+                    DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 3000-FIN
+                       THRU 3000-FIN-EXIT
+           END-EVALUATE
+      *
+           .
+      *
+       2300-CERRAR-CURSOR-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 3000-FIN                                                     **
+      ** MOSTRAMOS LOS DATOS DEL PRESTAMO.                            **
+      ** FINALIZAMOS EL PGM.                                          **
+      ******************************************************************
+      *
+       3000-FIN.
+      *
+           PERFORM 3100-CERRAR-FICHEROS
+              THRU 3100-CERRAR-FICHEROS-EXIT
+      *
+           PERFORM 3200-MOSTRAR-ESTADISTICAS
+              THRU 3200-MOSTRAR-ESTADISTICAS-EXIT
+      *
+           STOP RUN
+      *
+           .
+      *
+       3000-FIN-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 3100-CERRAR-FICHEROS                                         **
+      ** CERRAMOS LOS FICHEROS DE ENTRADA Y SALIDA CONTROLANDO SU     **
+      ** FILE STATUS.                                                 **
+      ******************************************************************
+      *
+       3100-CERRAR-FICHEROS.
+      *
+           CLOSE FENTRADA
+                 FSALIDA
+      *
+           IF FS-FENTRADA NOT = '00'
+              DISPLAY 'ERROR AL CERRAR EL FICHERO FENTRADA'
+              DISPLAY 'PARRAFO: 3100-CERRAR-FICHEROS'
+              DISPLAY 'NOMBRE FICHERO: FENTRADA'
+              DISPLAY 'FILE STATUS: ' FS-FENTRADA
+           END-IF
+      *
+           IF FS-FSALIDA NOT = '00'
+              DISPLAY 'ERROR AL CERRAR EL FICHERO FSALIDA'
+              DISPLAY 'PARRAFO: 3100-CERRAR-FICHEROS'
+              DISPLAY 'NOMBRE FICHERO: FSALIDA'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA
+           END-IF
+      *
+           .
+      *
+       3100-CERRAR-FICHEROS-EXIT.
+           EXIT.
+      *
+      *
+      ******************************************************************
+      ** 3200-MOSTRAR-ESTADISTICAS                                    **
+      ** MOSTRAMOS ESTADISTICAS DEL PGM IMPRIMIENTO LOS REG. LEIDOS   **
+      ** DEL FICHERO DE ENTRADA Y LOS REG. ESCRITOS DEL FICH. DE SALIDA*
+      ******************************************************************
+      *
+       3200-MOSTRAR-ESTADISTICAS.
+      *
+           DISPLAY '*******************************'
+           DISPLAY '**D A T O S   E J P G M C 0 1**'
+           DISPLAY '*******************************'
+           DISPLAY '*REG.LEIDOS FENTRADA: ' CN-REG-LEIDOS-FENTRADA ' **'
+           DISPLAY '*REG.ESCRIT FSALIDA : ' CN-REG-ESCRIT-FSALIDA ' **'
+           DISPLAY '*******************************'
+      *
+           .
+      *
+       3200-MOSTRAR-ESTADISTICAS-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      ** 9000-LEER-FENTRADA                                           **
+      ** LEEMOS REGISTRO DEL FICHERO FENTRADA CONTROLANDO SU FILE     **
+      ** STATUS.                                                      **
+      ******************************************************************
+      *
+       9000-LEER-FENTRADA.
+      *
+           READ FENTRADA INTO CPY-CPYDIREI
+      *
+           EVALUATE FS-FENTRADA
+               WHEN '00'
+                    ADD 1               TO CN-REG-LEIDOS-FENTRADA
+               WHEN '10'
+                    SET SW-SI-FIN-FENTRADA     TO TRUE
+               WHEN OTHER
+                    DISPLAY 'ERROR AL LEER EL FICHERO FENTRADA'
+                    DISPLAY 'PARRAFO: 9000-LEER-FENTRADA'
+                    DISPLAY 'NOMBRE FICHERO: FENTRADA'
+                    DISPLAY 'FILE STATUS: ' FS-FENTRADA
+      *
+                    PERFORM 3000-FIN
+                       THRU 3000-FIN-EXIT
+           END-EVALUATE
+      *
+           .
+      *
+       9000-LEER-FENTRADA-EXIT.
+           EXIT.

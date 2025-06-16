@@ -1,0 +1,10 @@
+1011Gorton                        Hazel               Auxiliar Contable                       Contabilidad                            Copiadoras                    00275981986-03-021964-11-21A
+1012Preston                       Liza                Ing. Mecanico                           Ingenieroa                              Copiadoras                    00290152022-01-011964-12-02M
+1041Tercan                        Robert              Aux. Admin. Unidad                      I + D                                   Impresoras                    00280441940-08-091965-01-25B
+1054Smith                         Howard              Aux. Diseno                             Diseno                                  Copiadoras                    00251761970-08-071967-08-09B
+1067Scote                         Gail                Especialista Diseno                     Diseno                                  Fax                           00369401948-06-081961-09-30A
+1068Mann                          Alyssa              Ing. Mecanico                           Ingenieroa                              Impresoras                    00478831958-03-191961-10-11A
+1075Kane                          Sheryl              Aux. Diseno                             Diseno                                  Impresoras                    00232391967-01-151969-08-28A
+1055Albert                        Maxine              Aux. Admin. Unidad                      Mercado                                 Copiadoras                           1954-05-09          C
+1056Gonzales                      Joe                 Director Unidad                         Administracion                          Copiadoras                           1964-11-13          C
+1076McKormick                     Brad                Ingeniero Jefe                          Ingenieroa                              Copiadoras                    00290152022-01-011940-09-08M

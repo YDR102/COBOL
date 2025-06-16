@@ -1,0 +1,22 @@
+{
+    "files.readonlyInclude": {
+        "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true
+    },
+    "cobol-lsp.cpy-manager.paths-local": [
+        "COPYBOOK",
+        "I:\\COBOL\\COPYBOOK"
+    ],
+    "dataworkspace.excludedProjects": [
+        "DAVID/DAVID.sqlproj",
+        "BaseDatos/BaseDatos.sqlproj"
+    ],
+    "microFocusCOBOL.editor.dialect": "ACUCOBOL",
+    "cobol-lsp.cpy-manager.paths-uss": [
+        "I:\\COBOL\\COPYBOOK",
+        "COPYBOOK"
+    ],
+    "cobol-lsp.cpy-manager.paths-dsn": [
+        "I:\\COBOL\\COPYBOOK",
+        "COPYBOOK"
+    ]
+}
