@@ -54,6 +54,14 @@
              88 SI-FIN-CURSOR          VALUE 'S'.
              88 NO-FIN-CURSOR          VALUE 'N'.
       *
+       01 ERRORES.
+             05 COD-RETORNO            PIC X(02).
+             05 COD-SUBRETORNO         PIC S9(09).
+             05 PARRAFO                PIC X(30).
+             05 TABLA                  PIC X(25).
+             05 DESCRIPCION            PIC X(30).
+             05 SQLCODE-E              PIC -999.
+      *
       *COPY DEL FICHERO DE SALIDA FSALIDA
        COPY CPYCOMFI.
       *
@@ -104,7 +112,7 @@
            INITIALIZE FS-FILE-STATUS
                       CN-CONTADORES
                       DCLCOMPANIAS-SEGUROS
-                      CPYCOMFI
+                      DATOS-COM
       *
            SET NO-FIN-CURSOR       TO TRUE
       *
@@ -203,7 +211,7 @@
            MOVE TB-NOMBRE-COMPANIA TO NOMBRE-COMPANIA-S
            MOVE TB-NUMERO-POLIZA   TO NUMERO-POLIZA-S
 
-           WRITE REG-FSALIDA        FROM SALIDA-COM
+           WRITE REG-FSALIDA        FROM DATOS-COM
       *
            IF FS-FSALIDA NOT = CT-00
               DISPLAY 'ERROR AL ESCRIBIR EN FSALIDA'
@@ -214,7 +222,7 @@
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            ELSE
-              INITIALIZE SALIDA-COM
+              INITIALIZE DATOS-COM
               ADD 1                  TO CN-ESCRITOS
            END-IF
       *

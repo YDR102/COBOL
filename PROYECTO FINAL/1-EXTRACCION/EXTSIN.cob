@@ -54,6 +54,14 @@
              88 SI-FIN-CURSOR          VALUE 'S'.
              88 NO-FIN-CURSOR          VALUE 'N'.
       *
+       01 ERRORES.
+             05 COD-RETORNO            PIC X(02).
+             05 COD-SUBRETORNO         PIC S9(09).
+             05 PARRAFO                PIC X(30).
+             05 TABLA                  PIC X(25).
+             05 DESCRIPCION            PIC X(30).
+             05 SQLCODE-E              PIC -999.
+      *
       *COPY DEL FICHERO DE SALIDA FSALIDA
        COPY CPYSINFI.
       *
@@ -108,7 +116,7 @@
            INITIALIZE FS-FILE-STATUS
                       CN-CONTADORES
                       DCLSINIESTROS-PEPITO-SEG
-                      CPYSINFI
+                      DATOS-SIN
       *
            SET NO-FIN-CURSOR       TO TRUE
       *
@@ -211,7 +219,7 @@
            MOVE TB-NUMERO-POLIZA   TO NUMERO-POLIZA-S
            MOVE TB-DNI-PERITO      TO DNI-PERITO-S
 
-           WRITE REG-FSALIDA        FROM SALIDA-SIN
+           WRITE REG-FSALIDA        FROM DATOS-SIN
       *
            IF FS-FSALIDA NOT = CT-00
               DISPLAY 'ERROR AL ESCRIBIR EN FSALIDA'
@@ -222,7 +230,7 @@
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            ELSE
-              INITIALIZE SALIDA-SIN
+              INITIALIZE DATOS-SIN
               ADD 1                  TO CN-ESCRITOS
            END-IF
       *

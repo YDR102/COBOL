@@ -1,13 +1,5 @@
 
-       01 CPYCOMFI.
-          05 SALIDA-COM.
-                  10 ID-S                   PIC S9(9).
-                  10 NUMERO-POLIZA-S        PIC X(9).
-                  10 NOMBRE-COMPANIA-S      PIC X(25).
-          05 ERRORES.
-                  10 COD-RETORNO            PIC X(02).
-                  10 COD-SUBRETORNO         PIC S9(09).
-                  10 PARRAFO                PIC X(30).
-                  10 TABLA                  PIC X(25).
-                  10 DESCRIPCION            PIC X(30).
-                  10 SQLCODE-E              PIC -999.
+       01 DATOS-COM.
+           05 ID-S                   PIC S9(9).
+           05 NUMERO-POLIZA-S        PIC X(9).
+           05 NOMBRE-COMPANIA-S      PIC X(25).
