@@ -433,14 +433,14 @@
       *
        3200-MOSTRAR-ESTADISTICAS.
       *
-           DISPLAY '***************************************************'
-           DISPLAY '*       ESTADISTICAS DEL PGM PGMFICH              *'
-           DISPLAY '***************************************************'
-           DISPLAY '*REG FENTRADA:  *' CN-REG-LEIDOS-FENTRADA
-           DISPLAY '*REG FSALIDA1: *' CN-REG-ESCRIT-FSALIDA1
-           DISPLAY '*REG FSALIDA2: *' CN-REG-ESCRIT-FSALIDA2
-           DISPLAY '*REG FSALIDA3: *' CN-REG-ESCRIT-FSALIDA3
-           DISPLAY '***************************************************'
+           DISPLAY '**************************'
+           DISPLAY '*      ESTADISTICAS      *'
+           DISPLAY '**************************'
+           DISPLAY '*REG FENTRADA:           *' CN-REG-LEIDOS-FENTRADA
+           DISPLAY '*REG FSALIDA1:           *' CN-REG-ESCRIT-FSALIDA1
+           DISPLAY '*REG FSALIDA2:           *' CN-REG-ESCRIT-FSALIDA2
+           DISPLAY '*REG FSALIDA3:           *' CN-REG-ESCRIT-FSALIDA3
+           DISPLAY '**************************'
       *
            .
       *
