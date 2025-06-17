@@ -57,6 +57,11 @@
        01  WK-VARIABLES.
            05 CLAVE1                              PIC X(10).
            05 CLAVE2                              PIC X(10).
+           05 PALABRA                             PIC X(10).
+           05 COBERTURA1                          PIC X(500).
+           05 COBERTURA2                          PIC X(500).
+           05 COBERTURA3                          PIC X(500).
+           05 PRIMA                               PIC 9(15)V9(02).
       *
        01  CN-CONTADORES.
            05  CN-REG-LEIDOS-FENTRADA              PIC 9(03).
@@ -235,13 +240,27 @@
       *
        2100-INFORMAR-SALIDA-1.
       *
-           UNSTRING COND-PART-SEG DELIMITED BY ','
-           INTO PRIMA-VID, EDAD-VID, COBERTURAS-VID
+           UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
+           INTO PALABRA, PRIMA,
+                     PALABRA, EDAD-VID,
+                     COBERTURA1, COBERTURA2, COBERTURA3
+           END-UNSTRING.
+
+           STRING COBERTURA1, COBERTURA2, COBERTURA3 DELIMITED BY SIZE
+           INTO COBERTURAS-VID
+           END-STRING
+
+           UNSTRING PRIMA DELIMITED BY ' '
+           INTO PRIMA-VID
            END-UNSTRING.
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-VID
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-VID
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-VID
+
+           DISPLAY PRIMA-VID
+           DISPLAY COBERTURAS-VID
+           DISPLAY EDAD-VID
       *
            .
       *
