@@ -1,6 +1,6 @@
        IDENTIFICATION DIVISION.
       *
-       PROGRAM-ID.  PGMCONCI.
+       PROGRAM-ID.  TRASEGM.
        AUTHOR.      DAVID.
        DATE-WRITTEN 17/06/2025.
       *
@@ -191,11 +191,6 @@
       *
       ******************************************************************
       * 2000-PROCESO                                                   *
-      *                                                                *
-      *    Leer ambos ficheros simultáneamente                         *
-      *    Verificar si los códigos de empleado coinciden              *
-      *    Generar un registro en el informe con el resultado          *
-      *    Terminar cuando uno de los ficheros llegue a fin            *
       ******************************************************************
       *
        2000-PROCESO.
@@ -242,8 +237,6 @@
       *
            UNSTRING COND-PART-SEG DELIMITED BY ','
            INTO PRIMA-VID, EDAD-VID, COBERTURAS-VID
-           ON OVERFLOW DISPLAY 'OVERFLOW DETECTED IN UNSTRING'
-           NOT ON OVERFLOW DISPLAY 'UNSTRING COMPLETED SUCCESSFULLY'
            END-UNSTRING.
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-VID
@@ -288,8 +281,6 @@
       *
            UNSTRING COND-PART-SEG DELIMITED BY ','
            INTO PRIMA-AUT, EDAD-AUT, CATEGORIA-AUT, COBERTURAS-AUT
-           ON OVERFLOW DISPLAY 'OVERFLOW DETECTED IN UNSTRING'
-           NOT ON OVERFLOW DISPLAY 'UNSTRING COMPLETED SUCCESSFULLY'
            END-UNSTRING.
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-AUT
@@ -334,8 +325,6 @@
       *
            UNSTRING COND-PART-SEG DELIMITED BY ','
            INTO PRIMA-HOG, CONTINENTE-HOG, CONTENIDO-HOG, COBERTURAS-HOG
-           ON OVERFLOW DISPLAY 'OVERFLOW DETECTED IN UNSTRING'
-           NOT ON OVERFLOW DISPLAY 'UNSTRING COMPLETED SUCCESSFULLY'
            END-UNSTRING.
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-HOG
