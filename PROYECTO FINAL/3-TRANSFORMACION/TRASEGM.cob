@@ -200,7 +200,34 @@
       *
        2000-PROCESO.
       *
+           EVALUATE TIPO-SEG
+               WHEN  '01'
+                   PERFORM 2100-INFORMAR-SALIDA-1
+                      THRU 2100-INFORMAR-SALIDA-1-EXIT
 
+                   PERFORM 2200-ESCRIBIR-FSALIDA-1
+                      THRU 2200-ESCRIBIR-FSALIDA-1-EXIT
+                   CONTINUE
+               WHEN  '02'
+                   PERFORM 2100-INFORMAR-SALIDA-2
+                      THRU 2100-INFORMAR-SALIDA-2-EXIT
+
+                   PERFORM 2200-ESCRIBIR-FSALIDA-2
+                      THRU 2200-ESCRIBIR-FSALIDA-2-EXIT
+                   CONTINUE
+               WHEN  '03'
+                   PERFORM 2100-INFORMAR-SALIDA-3
+                      THRU 2100-INFORMAR-SALIDA-3-EXIT
+
+                   PERFORM 2200-ESCRIBIR-FSALIDA-3
+                      THRU 2200-ESCRIBIR-FSALIDA-3-EXIT
+                   CONTINUE
+               WHEN OTHER
+                     DISPLAY 'TIPO DE SEGURO NO VÁLIDO: ' TIPO-SEG
+                     DISPLAY 'PARRAFO: 2000-PROCESO'
+                     PERFORM 3000-FIN
+                         THRU 3000-FIN-EXIT
+           END-EVALUATE
       *
            .
       *
@@ -213,7 +240,15 @@
       *
        2100-INFORMAR-SALIDA-1.
       *
-      *    MOVE ID-CLIENTE-CEN         TO ID-CLIENTE-MAT
+           UNSTRING COND-PART-SEG DELIMITED BY ','
+           INTO PRIMA-VID, EDAD-VID, COBERTURAS-VID
+           ON OVERFLOW DISPLAY 'OVERFLOW DETECTED IN UNSTRING'
+           NOT ON OVERFLOW DISPLAY 'UNSTRING COMPLETED SUCCESSFULLY'
+           END-UNSTRING.
+
+           MOVE NUMERO-POLIZA-SEG         TO POLIZA-VID
+           MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-VID
+           MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-VID
       *
            .
       *
@@ -251,7 +286,15 @@
       *
        2100-INFORMAR-SALIDA-2.
       *
-      *    MOVE ID-CLIENTE-CEN         TO ID-CLIENTE-SC
+           UNSTRING COND-PART-SEG DELIMITED BY ','
+           INTO PRIMA-AUT, EDAD-AUT, CATEGORIA-AUT, COBERTURAS-AUT
+           ON OVERFLOW DISPLAY 'OVERFLOW DETECTED IN UNSTRING'
+           NOT ON OVERFLOW DISPLAY 'UNSTRING COMPLETED SUCCESSFULLY'
+           END-UNSTRING.
+
+           MOVE NUMERO-POLIZA-SEG         TO POLIZA-AUT
+           MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-AUT
+           MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-AUT
       *
            .
       *
@@ -289,7 +332,15 @@
       *
        2100-INFORMAR-SALIDA-3.
       *
-      *    MOVE ID-CLIENTE-NAC         TO ID-CLIENTE-SN
+           UNSTRING COND-PART-SEG DELIMITED BY ','
+           INTO PRIMA-HOG, CONTINENTE-HOG, CONTENIDO-HOG, COBERTURAS-HOG
+           ON OVERFLOW DISPLAY 'OVERFLOW DETECTED IN UNSTRING'
+           NOT ON OVERFLOW DISPLAY 'UNSTRING COMPLETED SUCCESSFULLY'
+           END-UNSTRING.
+
+           MOVE NUMERO-POLIZA-SEG         TO POLIZA-HOG
+           MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-HOG
+           MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-HOG
       *
            .
       *
