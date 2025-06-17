@@ -43,7 +43,7 @@
             RECORDING MODE IS F
             DATA RECORD IS REG-SAL.
 
-       01 REG-SAL             PIC X(688).
+       01 REG-SAL             PIC X(713).
       *
       ******************************************************************
       *     W O R K I N G   S T O R A G E                              *

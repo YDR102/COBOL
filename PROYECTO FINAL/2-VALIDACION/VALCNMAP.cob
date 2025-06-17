@@ -33,15 +33,15 @@
       *
        FD ENTRADA2
            RECORDING MODE IS F.
-       01  REG-ENTRADA2                                     PIC X(688).
+       01  REG-ENTRADA2                                     PIC X(713).
       *
        FD FSALIDA
            RECORDING MODE IS F.
-       01  REG-FSALIDA                                      PIC X(688).
+       01  REG-FSALIDA                                      PIC X(713).
       *
        FD DESCARTE
            RECORDING MODE IS F.
-       01  REG-DESCARTE                                     PIC X(688).
+       01  REG-DESCARTE                                     PIC X(713).
       *
        WORKING-STORAGE SECTION.
       *

@@ -29,7 +29,7 @@
       *
        FD FSALIDA
            RECORDING MODE IS F.
-       01  REG-FSALIDA                PIC X(2530).
+       01  REG-FSALIDA                PIC X(2540).
       *
        WORKING-STORAGE SECTION.
       *
