@@ -189,9 +189,10 @@
        2000-PROCESO.
       *
            IF CLAVE1 = CLAVE2
-              PERFORM 2100-ESCRIBIR-FSALIDA
-                 THRU 2100-ESCRIBIR-FSALIDA-EXIT
-      *
+
+              PERFORM 2200-ESCRIBIR-DESCARTE
+                 THRU 2200-ESCRIBIR-DESCARTE-EXIT
+
               PERFORM 9100-LEER-ENTRADA2
                  THRU 9100-LEER-ENTRADA2-EXIT
            ELSE
@@ -202,8 +203,8 @@
               ELSE
                  DISPLAY 'CLAVE2 NO EXISTE EN FICHERO1'
 
-                 PERFORM 2200-ESCRIBIR-DESCARTE
-                    THRU 2200-ESCRIBIR-DESCARTE-EXIT
+                 PERFORM 2100-ESCRIBIR-FSALIDA
+                    THRU 2100-ESCRIBIR-FSALIDA-EXIT
 
                  PERFORM 9100-LEER-ENTRADA2
                     THRU 9100-LEER-ENTRADA2-EXIT
