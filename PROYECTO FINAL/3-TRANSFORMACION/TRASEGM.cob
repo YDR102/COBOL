@@ -11,8 +11,8 @@
            DECIMAL-POINT IS COMMA.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT ENTRADA ASSIGN TO ENTRADA1
-           FILE STATUS FS-ENTRADA.
+           SELECT FENTRADA ASSIGN TO FENTRADA
+           FILE STATUS FS-FENTRADA.
       *
            SELECT FSALIDA1 ASSIGN TO FSALIDA1
            FILE STATUS FS-FSALIDA1.
@@ -26,9 +26,9 @@
       *
        FILE SECTION.
       *
-       FD ENTRADA
+       FD FENTRADA
            RECORDING MODE IS F.
-       01  REG-ENTRADA                            PIC X(2540).
+       01  REG-FENTRADA                           PIC X(2540).
       *    SEGURO
       *
        FD FSALIDA1
@@ -49,7 +49,7 @@
        WORKING-STORAGE SECTION.
       *
        01  FS-FILE-STATUS.
-           05  FS-ENTRADA                         PIC X(02).
+           05  FS-FENTRADA                         PIC X(02).
            05  FS-FSALIDA1                        PIC X(02).
            05  FS-FSALIDA2                        PIC X(02).
            05  FS-FSALIDA3                        PIC X(02).
@@ -59,7 +59,7 @@
            05 CLAVE2                              PIC X(10).
       *
        01  CN-CONTADORES.
-           05  CN-REG-LEIDOS-ENTRADA              PIC 9(03).
+           05  CN-REG-LEIDOS-FENTRADA              PIC 9(03).
            05  CN-REG-ESCRIT-FSALIDA1             PIC 9(03).
            05  CN-REG-ESCRIT-FSALIDA2             PIC 9(03).
            05  CN-REG-ESCRIT-FSALIDA3             PIC 9(03).
@@ -70,11 +70,11 @@
            05  CT-1                               PIC 9(02) VALUE 1.
       *
        01  SW-SWITCHES.
-           05  SW-FIN-ENTRADA1                    PIC X(01).
-               88  SW-SI-FIN-ENTRADA1                         VALUE 'S'.
-               88  SW-NO-FIN-ENTRADA1                         VALUE 'N'.
+           05  SW-FIN-FENTRADA                     PIC X(01).
+               88  SW-SI-FIN-FENTRADA                        VALUE 'S'.
+               88  SW-NO-FIN-FENTRADA                        VALUE 'N'.
       *
-      *COPY DEL FICHERO DE ENTRADA ENTRADA1
+      *COPY DEL FICHERO DE FENTRADA ENTRADA1
       *
        COPY CPYSEGFI.
 
@@ -104,7 +104,7 @@
       *
            PERFORM 2000-PROCESO
               THRU 2000-PROCESO-EXIT
-             UNTIL SW-SI-FIN-ENTRADA1
+             UNTIL SW-SI-FIN-FENTRADA
       *
            PERFORM 3000-FIN
               THRU 3000-FIN-EXIT
@@ -125,12 +125,12 @@
                       DATOS-SEG
                       DATOS-VID
       *
-           SET SW-NO-FIN-ENTRADA1               TO TRUE
+           SET SW-NO-FIN-FENTRADA               TO TRUE
       *
            PERFORM 1100-ABRIR-FICHEROS
               THRU 1100-ABRIR-FICHEROS-EXIT
-           PERFORM 9000-LEER-ENTRADA
-              THRU 9000-LEER-ENTRADA-EXIT
+           PERFORM 9000-LEER-FENTRADA
+              THRU 9000-LEER-FENTRADA-EXIT
       *
            .
       *
@@ -143,15 +143,15 @@
       *
        1100-ABRIR-FICHEROS.
       *
-           OPEN INPUT ENTRADA
+           OPEN INPUT FENTRADA
            OPEN OUTPUT FSALIDA1
            OPEN OUTPUT FSALIDA2
            OPEN OUTPUT FSALIDA3
       *
-           IF FS-ENTRADA NOT = CT-00
-              DISPLAY 'ERROR AL ABRIR ENTRADA1'
+           IF FS-FENTRADA NOT = CT-00
+              DISPLAY 'ERROR AL ABRIR FENTRADA'
               DISPLAY 'PARRAFO: 1100-ABRIR-FICHEROS'
-              DISPLAY 'FILE STATUS: ' FS-ENTRADA
+              DISPLAY 'FILE STATUS: ' FS-FENTRADA
       *
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
@@ -384,15 +384,15 @@
       *
        3100-CERRAR-FICHEROS.
       *
-           CLOSE ENTRADA
+           CLOSE FENTRADA
            CLOSE FSALIDA1
            CLOSE FSALIDA2
            CLOSE FSALIDA3
       *
-           IF FS-ENTRADA NOT = CT-00
-              DISPLAY 'ERROR AL CERRAR ENTRADA'
+           IF FS-FENTRADA NOT = CT-00
+              DISPLAY 'ERROR AL CERRAR FENTRADA'
               DISPLAY 'PARRAFO: 3100-CERRAR-FICHEROS'
-              DISPLAY 'FILE STATUS: ' FS-ENTRADA
+              DISPLAY 'FILE STATUS: ' FS-FENTRADA
            END-IF
       *
            IF FS-FSALIDA1 NOT = CT-00
@@ -436,14 +436,10 @@
            DISPLAY '***************************************************'
            DISPLAY '*       ESTADISTICAS DEL PGM PGMFICH              *'
            DISPLAY '***************************************************'
-           DISPLAY '*REG ENTRADA:  ' CN-REG-LEIDOS-ENTRADA  '          '
-                   '                      *'
-           DISPLAY '*REG FSALIDA1: ' CN-REG-ESCRIT-FSALIDA1 '          '
-                   '                      *'
-           DISPLAY '*REG FSALIDA2: ' CN-REG-ESCRIT-FSALIDA2 '          '
-                   '                      *'
-           DISPLAY '*REG FSALIDA3: ' CN-REG-ESCRIT-FSALIDA3 '          '
-                   '                      *'
+           DISPLAY '*REG FENTRADA:  *' CN-REG-LEIDOS-FENTRADA
+           DISPLAY '*REG FSALIDA1: *' CN-REG-ESCRIT-FSALIDA1
+           DISPLAY '*REG FSALIDA2: *' CN-REG-ESCRIT-FSALIDA2
+           DISPLAY '*REG FSALIDA3: *' CN-REG-ESCRIT-FSALIDA3
            DISPLAY '***************************************************'
       *
            .
@@ -452,23 +448,23 @@
            EXIT.
       *
       ******************************************************************
-      * 9000-LEER-ENTRADA                                              *
+      * 9000-LEER-FENTRADA                                              *
       ******************************************************************
       *
-       9000-LEER-ENTRADA.
+       9000-LEER-FENTRADA.
       *
-           READ ENTRADA INTO DATOS-SEG
+           READ FENTRADA INTO DATOS-SEG
       *
-           EVALUATE FS-ENTRADA
+           EVALUATE FS-FENTRADA
                WHEN CT-00
-                    ADD CT-1               TO CN-REG-LEIDOS-ENTRADA
+                    ADD CT-1               TO CN-REG-LEIDOS-FENTRADA
                WHEN CT-10
-                    SET SW-SI-FIN-ENTRADA1  TO TRUE
+                    SET SW-SI-FIN-FENTRADA  TO TRUE
                     MOVE HIGH-VALUES       TO CLAVE1
                WHEN OTHER
-                    DISPLAY 'ERROR AL ABRIR EL FICHERO ENTRADA'
-                    DISPLAY 'PARRAFO: 9000-LEER-ENTRADA1'
-                    DISPLAY 'FILE STATUS: ' FS-ENTRADA
+                    DISPLAY 'ERROR AL ABRIR EL FICHERO FENTRADA'
+                    DISPLAY 'PARRAFO: 9000-LEER-FENTRADA'
+                    DISPLAY 'FILE STATUS: ' FS-FENTRADA
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
@@ -476,5 +472,5 @@
       *
            .
       *
-       9000-LEER-ENTRADA-EXIT.
+       9000-LEER-FENTRADA-EXIT.
            EXIT.
