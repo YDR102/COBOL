@@ -56,9 +56,10 @@
       *
        01  WK-VARIABLES.
            05 PALABRA-ACU                         PIC X(10).
-           05 COBERTURA1-ACU                      PIC X(166).
-           05 COBERTURA2-ACU                      PIC X(166).
-           05 COBERTURA3-ACU                      PIC X(166).
+           05 COBERTURA1-ACU                      PIC X(125).
+           05 COBERTURA2-ACU                      PIC X(125).
+           05 COBERTURA3-ACU                      PIC X(125).
+           05 COBERTURA4-ACU                      PIC X(125).
            05 PRIMA-ACU                           PIC X(21).
            05 CONTENIDO-ACU                       PIC X(21).
            05 CONTINENTE-ACU                      PIC X(21).
@@ -209,18 +210,18 @@
                       THRU 2200-ESCRIBIR-FSALIDA-1-EXIT
                    CONTINUE
                WHEN  '02'
-                   PERFORM 2100-INFORMAR-SALIDA-2
-                      THRU 2100-INFORMAR-SALIDA-2-EXIT
-
-                   PERFORM 2200-ESCRIBIR-FSALIDA-2
-                      THRU 2200-ESCRIBIR-FSALIDA-2-EXIT
-                   CONTINUE
-               WHEN  '03'
                    PERFORM 2100-INFORMAR-SALIDA-3
                       THRU 2100-INFORMAR-SALIDA-3-EXIT
 
                    PERFORM 2200-ESCRIBIR-FSALIDA-3
                       THRU 2200-ESCRIBIR-FSALIDA-3-EXIT
+                   CONTINUE
+               WHEN  '03'
+                   PERFORM 2100-INFORMAR-SALIDA-2
+                      THRU 2100-INFORMAR-SALIDA-2-EXIT
+
+                   PERFORM 2200-ESCRIBIR-FSALIDA-2
+                      THRU 2200-ESCRIBIR-FSALIDA-2-EXIT
                    CONTINUE
                WHEN OTHER
                      DISPLAY 'TIPO DE SEGURO NO VÁLIDO: ' TIPO-SEG
@@ -256,7 +257,7 @@
            END-UNSTRING.
 
            STRING COBERTURA1-ACU, COBERTURA2-ACU, COBERTURA3-ACU
-           DELIMITED BY SIZE
+           DELIMITED BY '  '
            INTO COBERTURAS-VID
            END-STRING
 
@@ -267,6 +268,13 @@
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-VID
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-VID
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-VID
+
+           DISPLAY POLIZA-VID
+           DISPLAY PRIMA-VID
+           DISPLAY EDAD-VID
+           DISPLAY COBERTURAS-VID
+           DISPLAY FECHA-INICIO-VID
+           DISPLAY FECHA-VENCIMIENTO-VID
       *
            .
       *
@@ -309,15 +317,22 @@
                       COBERTURA2-ACU
                       COBERTURA3-ACU
 
+           DISPLAY COND-PART-SEG
+
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
            INTO PALABRA-ACU, PRIMA-ACU,
                 PALABRA-ACU, EDAD-AUT,
+                PALABRA-ACU, CATEGORIA-AUT,
                 PALABRA-ACU, COBERTURA1-ACU,
                 COBERTURA2-ACU, COBERTURA3-ACU
            END-UNSTRING.
 
+           DISPLAY COBERTURA1-ACU
+           DISPLAY COBERTURA2-ACU
+           DISPLAY COBERTURA3-ACU
+
            STRING COBERTURA1-ACU, COBERTURA2-ACU, COBERTURA3-ACU
-           DELIMITED BY SIZE
+           DELIMITED BY '  '
            INTO COBERTURAS-AUT
            END-STRING
 
@@ -328,6 +343,14 @@
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-AUT
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-AUT
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-AUT
+
+           DISPLAY POLIZA-AUT
+           DISPLAY PRIMA-AUT
+           DISPLAY EDAD-AUT
+           DISPLAY CATEGORIA-AUT
+           DISPLAY COBERTURAS-AUT
+           DISPLAY FECHA-INICIO-AUT
+           DISPLAY FECHA-VENCIMIENTO-AUT
       *
            .
       *
@@ -374,12 +397,12 @@
                 PALABRA-ACU, CONTINENTE-ACU,
                 PALABRA-ACU, CONTENIDO-ACU,
                 PALABRA-ACU, COBERTURA1-ACU,
-                PALABRA-ACU, COBERTURA2-ACU,
-                PALABRA-ACU, COBERTURA3-ACU,
+                COBERTURA2-ACU, COBERTURA3-ACU, COBERTURA4-ACU
            END-UNSTRING.
 
-           STRING COBERTURA1-ACU, COBERTURA2-ACU, COBERTURA3-ACU
-           DELIMITED BY SIZE
+           STRING COBERTURA1-ACU, COBERTURA2-ACU,
+                  COBERTURA3-ACU, COBERTURA4-ACU
+           DELIMITED BY '  '
            INTO COBERTURAS-HOG
            END-STRING
 
@@ -399,13 +422,13 @@
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-HOG
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-HOG
 
-           DISPLAY NUMERO-POLIZA-SEG
-           DISPLAY FECHA-INICIO-SEG
-           DISPLAY FECHA-VENCIMIENTO-SEG
+           DISPLAY POLIZA-HOG
            DISPLAY PRIMA-HOG
            DISPLAY CONTINENTE-HOG
            DISPLAY CONTENIDO-HOG
            DISPLAY COBERTURAS-HOG
+           DISPLAY FECHA-INICIO-HOG
+           DISPLAY FECHA-VENCIMIENTO-HOG
            .
       *
        2100-INFORMAR-SALIDA-3-EXIT.
