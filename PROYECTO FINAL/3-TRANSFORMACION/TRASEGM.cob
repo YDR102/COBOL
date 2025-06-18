@@ -243,6 +243,11 @@
       *
        2100-INFORMAR-SALIDA-1.
       *
+           INITIALIZE PRIMA
+                      COBERTURA1
+                      COBERTURA2
+                      COBERTURA3
+
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
            INTO PALABRA, PRIMA,
                 PALABRA, EDAD-VID,
@@ -297,6 +302,11 @@
       *
        2100-INFORMAR-SALIDA-2.
       *
+           INITIALIZE PRIMA
+                      COBERTURA1
+                      COBERTURA2
+                      COBERTURA3
+
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
            INTO PALABRA, PRIMA,
                 PALABRA, EDAD-AUT,
@@ -351,6 +361,10 @@
       *
        2100-INFORMAR-SALIDA-3.
       *
+           INITIALIZE PRIMA
+                      CONTENIDO
+                      CONTINENTE
+
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
            INTO PALABRA, PRIMA,
                 PALABRA, CONTINENTE,
