@@ -55,13 +55,13 @@
            05  FS-FSALIDA3                        PIC X(02).
       *
        01  WK-VARIABLES.
-           05 PALABRA                             PIC X(10).
-           05 COBERTURA1                          PIC X(166).
-           05 COBERTURA2                          PIC X(166).
-           05 COBERTURA3                          PIC X(166).
-           05 PRIMA                               PIC X(21).
-           05 CONTENIDO                           PIC X(21).
-           05 CONTINENTE                          PIC X(21).
+           05 PALABRA-ACU                         PIC X(10).
+           05 COBERTURA1-ACU                      PIC X(166).
+           05 COBERTURA2-ACU                      PIC X(166).
+           05 COBERTURA3-ACU                      PIC X(166).
+           05 PRIMA-ACU                           PIC X(21).
+           05 CONTENIDO-ACU                       PIC X(21).
+           05 CONTINENTE-ACU                      PIC X(21).
       *
        01  CN-CONTADORES.
            05  CN-REG-LEIDOS-FENTRADA             PIC 9(03).
@@ -243,22 +243,24 @@
       *
        2100-INFORMAR-SALIDA-1.
       *
-           INITIALIZE PRIMA
-                      COBERTURA1
-                      COBERTURA2
-                      COBERTURA3
+           INITIALIZE PRIMA-ACU
+                      COBERTURA1-ACU
+                      COBERTURA2-ACU
+                      COBERTURA3-ACU
 
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
-           INTO PALABRA, PRIMA,
-                PALABRA, EDAD-VID,
-                PALABRA, COBERTURA1, COBERTURA2, COBERTURA3
+           INTO PALABRA-ACU, PRIMA-ACU,
+                PALABRA-ACU, EDAD-VID,
+                PALABRA-ACU, COBERTURA1-ACU,
+                COBERTURA2-ACU, COBERTURA3-ACU
            END-UNSTRING.
 
-           STRING COBERTURA1, COBERTURA2, COBERTURA3 DELIMITED BY SIZE
+           STRING COBERTURA1-ACU, COBERTURA2-ACU, COBERTURA3-ACU
+           DELIMITED BY SIZE
            INTO COBERTURAS-VID
            END-STRING
 
-           UNSTRING PRIMA DELIMITED BY ' '
+           UNSTRING PRIMA-ACU DELIMITED BY ' '
            INTO PRIMA-VID
            END-UNSTRING.
 
@@ -302,22 +304,24 @@
       *
        2100-INFORMAR-SALIDA-2.
       *
-           INITIALIZE PRIMA
-                      COBERTURA1
-                      COBERTURA2
-                      COBERTURA3
+           INITIALIZE PRIMA-ACU
+                      COBERTURA1-ACU
+                      COBERTURA2-ACU
+                      COBERTURA3-ACU
 
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
-           INTO PALABRA, PRIMA,
-                PALABRA, EDAD-AUT,
-                PALABRA, COBERTURA1, COBERTURA2, COBERTURA3
+           INTO PALABRA-ACU, PRIMA-ACU,
+                PALABRA-ACU, EDAD-AUT,
+                PALABRA-ACU, COBERTURA1-ACU,
+                COBERTURA2-ACU, COBERTURA3-ACU
            END-UNSTRING.
 
-           STRING COBERTURA1, COBERTURA2, COBERTURA3 DELIMITED BY SIZE
+           STRING COBERTURA1-ACU, COBERTURA2-ACU, COBERTURA3-ACU
+           DELIMITED BY SIZE
            INTO COBERTURAS-AUT
            END-STRING
 
-           UNSTRING PRIMA DELIMITED BY ' '
+           UNSTRING PRIMA-ACU DELIMITED BY ' '
            INTO PRIMA-AUT
            END-UNSTRING.
 
@@ -361,31 +365,47 @@
       *
        2100-INFORMAR-SALIDA-3.
       *
-           INITIALIZE PRIMA
-                      CONTENIDO
-                      CONTINENTE
+           INITIALIZE PRIMA-ACU
+                      CONTENIDO-ACU
+                      CONTINENTE-ACU
 
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
-           INTO PALABRA, PRIMA,
-                PALABRA, CONTINENTE,
-                PALABRA, CONTENIDO
+           INTO PALABRA-ACU, PRIMA-ACU,
+                PALABRA-ACU, CONTINENTE-ACU,
+                PALABRA-ACU, CONTENIDO-ACU,
+                PALABRA-ACU, COBERTURA1-ACU,
+                PALABRA-ACU, COBERTURA2-ACU,
+                PALABRA-ACU, COBERTURA3-ACU,
            END-UNSTRING.
 
-           UNSTRING CONTINENTE DELIMITED BY ' '
+           STRING COBERTURA1-ACU, COBERTURA2-ACU, COBERTURA3-ACU
+           DELIMITED BY SIZE
+           INTO COBERTURAS-HOG
+           END-STRING
+
+           UNSTRING CONTINENTE-ACU DELIMITED BY ' '
            INTO CONTINENTE-HOG
            END-UNSTRING.
 
-           UNSTRING CONTENIDO DELIMITED BY ' '
+           UNSTRING CONTENIDO-ACU DELIMITED BY ' '
            INTO CONTENIDO-HOG
            END-UNSTRING.
 
-           UNSTRING PRIMA DELIMITED BY ' '
+           UNSTRING PRIMA-ACU DELIMITED BY ' '
            INTO PRIMA-HOG
            END-UNSTRING.
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-HOG
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-HOG
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-HOG
+
+           DISPLAY NUMERO-POLIZA-SEG
+           DISPLAY FECHA-INICIO-SEG
+           DISPLAY FECHA-VENCIMIENTO-SEG
+           DISPLAY PRIMA-HOG
+           DISPLAY CONTINENTE-HOG
+           DISPLAY CONTENIDO-HOG
+           DISPLAY COBERTURAS-HOG
            .
       *
        2100-INFORMAR-SALIDA-3-EXIT.
