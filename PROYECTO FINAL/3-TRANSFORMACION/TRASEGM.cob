@@ -33,17 +33,17 @@
       *
        FD FSALIDA1
            RECORDING MODE IS F.
-       01  REG-FSALIDA1                           PIC X(549).
+       01  REG-FSALIDA1                           PIC X(0549).
       *    VIDA
       *
        FD FSALIDA2
            RECORDING MODE IS F.
-       01  REG-FSALIDA2                           PIC X(579).
+       01  REG-FSALIDA2                           PIC X(0579).
       *    AUTO
       *
        FD FSALIDA3
            RECORDING MODE IS F.
-       01  REG-FSALIDA3                           PIC X(580).
+       01  REG-FSALIDA3                           PIC X(0580).
       *    HOGAR
       *
        WORKING-STORAGE SECTION.
@@ -59,7 +59,9 @@
            05 COBERTURA1                          PIC X(166).
            05 COBERTURA2                          PIC X(166).
            05 COBERTURA3                          PIC X(166).
-           05 PRIMA                               PIC X(20).
+           05 PRIMA                               PIC X(21).
+           05 CONTENIDO                           PIC X(21).
+           05 CONTINENTE                          PIC X(21).
       *
        01  CN-CONTADORES.
            05  CN-REG-LEIDOS-FENTRADA             PIC 9(03).
@@ -224,8 +226,11 @@
                      DISPLAY 'TIPO DE SEGURO NO VÁLIDO: ' TIPO-SEG
                      DISPLAY 'PARRAFO: 2000-PROCESO'
                      PERFORM 3000-FIN
-                        THRU 3000-FIN-EXIT
+                         THRU 3000-FIN-EXIT
            END-EVALUATE
+
+           PERFORM 9000-LEER-FENTRADA
+              THRU 9000-LEER-FENTRADA-EXIT
       *
            .
       *
@@ -244,32 +249,17 @@
                 PALABRA, COBERTURA1, COBERTURA2, COBERTURA3
            END-UNSTRING.
 
-           DISPLAY PALABRA
-           DISPLAY PRIMA
-           DISPLAY EDAD-VID
-
            STRING COBERTURA1, COBERTURA2, COBERTURA3 DELIMITED BY SIZE
            INTO COBERTURAS-VID
            END-STRING
-
-           DISPLAY COBERTURA1
-           DISPLAY COBERTURA2
-           DISPLAY COBERTURA3
-           DISPLAY COBERTURAS-VID
 
            UNSTRING PRIMA DELIMITED BY ' '
            INTO PRIMA-VID
            END-UNSTRING.
 
-           DISPLAY PRIMA-VID
-
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-VID
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-VID
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-VID
-
-           DISPLAY POLIZA-VID
-           DISPLAY FECHA-INICIO-VID
-           DISPLAY FECHA-VENCIMIENTO-VID
       *
            .
       *
@@ -313,32 +303,17 @@
                 PALABRA, COBERTURA1, COBERTURA2, COBERTURA3
            END-UNSTRING.
 
-           DISPLAY PALABRA
-           DISPLAY PRIMA
-           DISPLAY EDAD-AUT
-
            STRING COBERTURA1, COBERTURA2, COBERTURA3 DELIMITED BY SIZE
            INTO COBERTURAS-AUT
            END-STRING
-
-           DISPLAY COBERTURA1
-           DISPLAY COBERTURA2
-           DISPLAY COBERTURA3
-           DISPLAY COBERTURAS-AUT
 
            UNSTRING PRIMA DELIMITED BY ' '
            INTO PRIMA-AUT
            END-UNSTRING.
 
-           DISPLAY PRIMA-AUT
-
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-AUT
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-AUT
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-AUT
-
-           DISPLAY POLIZA-AUT
-           DISPLAY FECHA-INICIO-AUT
-           DISPLAY FECHA-VENCIMIENTO-AUT
       *
            .
       *
@@ -378,29 +353,25 @@
       *
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
            INTO PALABRA, PRIMA,
-                PALABRA, CONTINENTE-HOG,
-                PALABRA, CONTENIDO-HOG
+                PALABRA, CONTINENTE,
+                PALABRA, CONTENIDO
            END-UNSTRING.
 
-           DISPLAY PALABRA
-           DISPLAY PRIMA
-           DISPLAY CONTINENTE-HOG
-           DISPLAY CONTENIDO-HOG
+           UNSTRING CONTINENTE DELIMITED BY ' '
+           INTO CONTINENTE-HOG
+           END-UNSTRING.
+
+           UNSTRING CONTENIDO DELIMITED BY ' '
+           INTO CONTENIDO-HOG
+           END-UNSTRING.
 
            UNSTRING PRIMA DELIMITED BY ' '
            INTO PRIMA-HOG
            END-UNSTRING.
 
-           DISPLAY PRIMA-HOG
-
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-HOG
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-HOG
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-HOG
-
-           DISPLAY POLIZA-HOG
-           DISPLAY FECHA-INICIO-HOG
-           DISPLAY FECHA-VENCIMIENTO-HOG
-      *
            .
       *
        2100-INFORMAR-SALIDA-3-EXIT.
@@ -527,7 +498,7 @@
       *
            EVALUATE FS-FENTRADA
                WHEN CT-00
-                    ADD CT-1               TO CN-REG-LEIDOS-FENTRADA
+                    ADD CT-1                TO CN-REG-LEIDOS-FENTRADA
                WHEN CT-10
                     SET SW-SI-FIN-FENTRADA  TO TRUE
                WHEN OTHER
