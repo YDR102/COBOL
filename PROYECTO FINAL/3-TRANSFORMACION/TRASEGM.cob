@@ -49,22 +49,20 @@
        WORKING-STORAGE SECTION.
       *
        01  FS-FILE-STATUS.
-           05  FS-FENTRADA                         PIC X(02).
+           05  FS-FENTRADA                        PIC X(02).
            05  FS-FSALIDA1                        PIC X(02).
            05  FS-FSALIDA2                        PIC X(02).
            05  FS-FSALIDA3                        PIC X(02).
       *
        01  WK-VARIABLES.
-           05 CLAVE1                              PIC X(10).
-           05 CLAVE2                              PIC X(10).
            05 PALABRA                             PIC X(10).
-           05 COBERTURA1                          PIC X(500).
-           05 COBERTURA2                          PIC X(500).
-           05 COBERTURA3                          PIC X(500).
-           05 PRIMA                               PIC 9(15)V9(02).
+           05 COBERTURA1                          PIC X(166).
+           05 COBERTURA2                          PIC X(166).
+           05 COBERTURA3                          PIC X(166).
+           05 PRIMA                               PIC X(20).
       *
        01  CN-CONTADORES.
-           05  CN-REG-LEIDOS-FENTRADA              PIC 9(03).
+           05  CN-REG-LEIDOS-FENTRADA             PIC 9(03).
            05  CN-REG-ESCRIT-FSALIDA1             PIC 9(03).
            05  CN-REG-ESCRIT-FSALIDA2             PIC 9(03).
            05  CN-REG-ESCRIT-FSALIDA3             PIC 9(03).
@@ -75,9 +73,9 @@
            05  CT-1                               PIC 9(02) VALUE 1.
       *
        01  SW-SWITCHES.
-           05  SW-FIN-FENTRADA                     PIC X(01).
-               88  SW-SI-FIN-FENTRADA                        VALUE 'S'.
-               88  SW-NO-FIN-FENTRADA                        VALUE 'N'.
+           05  SW-FIN-FENTRADA                    PIC X(01).
+               88  SW-SI-FIN-FENTRADA                       VALUE 'S'.
+               88  SW-NO-FIN-FENTRADA                       VALUE 'N'.
       *
       *COPY DEL FICHERO DE FENTRADA ENTRADA1
       *
@@ -226,7 +224,7 @@
                      DISPLAY 'TIPO DE SEGURO NO VÁLIDO: ' TIPO-SEG
                      DISPLAY 'PARRAFO: 2000-PROCESO'
                      PERFORM 3000-FIN
-                         THRU 3000-FIN-EXIT
+                        THRU 3000-FIN-EXIT
            END-EVALUATE
       *
            .
@@ -235,32 +233,43 @@
            EXIT.
       *
       ******************************************************************
-      * 2100-INFORMAR-SALIDA-1                                         *
+      * 2100-INFORMAR-SALIDA-1      -- VIDA --                         *
       ******************************************************************
       *
        2100-INFORMAR-SALIDA-1.
       *
            UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
            INTO PALABRA, PRIMA,
-                     PALABRA, EDAD-VID,
-                     COBERTURA1, COBERTURA2, COBERTURA3
+                PALABRA, EDAD-VID,
+                PALABRA, COBERTURA1, COBERTURA2, COBERTURA3
            END-UNSTRING.
+
+           DISPLAY PALABRA
+           DISPLAY PRIMA
+           DISPLAY EDAD-VID
 
            STRING COBERTURA1, COBERTURA2, COBERTURA3 DELIMITED BY SIZE
            INTO COBERTURAS-VID
            END-STRING
 
+           DISPLAY COBERTURA1
+           DISPLAY COBERTURA2
+           DISPLAY COBERTURA3
+           DISPLAY COBERTURAS-VID
+
            UNSTRING PRIMA DELIMITED BY ' '
            INTO PRIMA-VID
            END-UNSTRING.
+
+           DISPLAY PRIMA-VID
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-VID
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-VID
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-VID
 
-           DISPLAY PRIMA-VID
-           DISPLAY COBERTURAS-VID
-           DISPLAY EDAD-VID
+           DISPLAY POLIZA-VID
+           DISPLAY FECHA-INICIO-VID
+           DISPLAY FECHA-VENCIMIENTO-VID
       *
            .
       *
@@ -293,18 +302,43 @@
            EXIT.
       *
       ******************************************************************
-      * 2100-INFORMAR-SALIDA-2                                         *
+      * 2100-INFORMAR-SALIDA-2          -- AUTO --                     *
       ******************************************************************
       *
        2100-INFORMAR-SALIDA-2.
       *
-           UNSTRING COND-PART-SEG DELIMITED BY ','
-           INTO PRIMA-AUT, EDAD-AUT, CATEGORIA-AUT, COBERTURAS-AUT
+           UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
+           INTO PALABRA, PRIMA,
+                PALABRA, EDAD-AUT,
+                PALABRA, COBERTURA1, COBERTURA2, COBERTURA3
            END-UNSTRING.
+
+           DISPLAY PALABRA
+           DISPLAY PRIMA
+           DISPLAY EDAD-AUT
+
+           STRING COBERTURA1, COBERTURA2, COBERTURA3 DELIMITED BY SIZE
+           INTO COBERTURAS-AUT
+           END-STRING
+
+           DISPLAY COBERTURA1
+           DISPLAY COBERTURA2
+           DISPLAY COBERTURA3
+           DISPLAY COBERTURAS-AUT
+
+           UNSTRING PRIMA DELIMITED BY ' '
+           INTO PRIMA-AUT
+           END-UNSTRING.
+
+           DISPLAY PRIMA-AUT
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-AUT
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-AUT
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-AUT
+
+           DISPLAY POLIZA-AUT
+           DISPLAY FECHA-INICIO-AUT
+           DISPLAY FECHA-VENCIMIENTO-AUT
       *
            .
       *
@@ -337,18 +371,35 @@
            EXIT.
       *
       ******************************************************************
-      * 2100-INFORMAR-SALIDA-3                                         *
+      * 2100-INFORMAR-SALIDA-3              -- HOGAR --                *
       ******************************************************************
       *
        2100-INFORMAR-SALIDA-3.
       *
-           UNSTRING COND-PART-SEG DELIMITED BY ','
-           INTO PRIMA-HOG, CONTINENTE-HOG, CONTENIDO-HOG, COBERTURAS-HOG
+           UNSTRING COND-PART-SEG DELIMITED BY ',' OR ': '
+           INTO PALABRA, PRIMA,
+                PALABRA, CONTINENTE-HOG,
+                PALABRA, CONTENIDO-HOG
            END-UNSTRING.
+
+           DISPLAY PALABRA
+           DISPLAY PRIMA
+           DISPLAY CONTINENTE-HOG
+           DISPLAY CONTENIDO-HOG
+
+           UNSTRING PRIMA DELIMITED BY ' '
+           INTO PRIMA-HOG
+           END-UNSTRING.
+
+           DISPLAY PRIMA-HOG
 
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-HOG
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-HOG
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-HOG
+
+           DISPLAY POLIZA-HOG
+           DISPLAY FECHA-INICIO-HOG
+           DISPLAY FECHA-VENCIMIENTO-HOG
       *
            .
       *
@@ -479,7 +530,6 @@
                     ADD CT-1               TO CN-REG-LEIDOS-FENTRADA
                WHEN CT-10
                     SET SW-SI-FIN-FENTRADA  TO TRUE
-                    MOVE HIGH-VALUES       TO CLAVE1
                WHEN OTHER
                     DISPLAY 'ERROR AL ABRIR EL FICHERO FENTRADA'
                     DISPLAY 'PARRAFO: 9000-LEER-FENTRADA'
