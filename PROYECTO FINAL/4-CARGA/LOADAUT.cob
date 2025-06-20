@@ -564,9 +564,9 @@
       *
            EVALUATE FS-FENTRADA
                WHEN CT-00
-                    ADD 1               TO CN-REG-LEIDOS-FENTRADA
+                    ADD 1                    TO CN-REG-LEIDOS-FENTRADA
                WHEN CT-10
-                    SET SW-SI-FIN-FENTRADA     TO TRUE
+                    SET SW-SI-FIN-FENTRADA   TO TRUE
       *
                     PERFORM 9100-UPDATE-DAREPOS-OK
                        THRU 9100-UPDATE-DAREPOS-OK-EXIT
