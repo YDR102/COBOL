@@ -161,14 +161,14 @@
            PERFORM 2100-INFORMAR-SALIDA1
               THRU 2100-INFORMAR-SALIDA1-EXIT
 
+           PERFORM 2200-ESCRIBIR-FSALIDA1
+              THRU 2200-ESCRIBIR-FSALIDA1-EXIT
+
            PERFORM 2500-LLAMAR-RUTINA
               THRU 2500-LLAMAR-RUTINA-EXIT
 
            PERFORM 2300-INFORMAR-SALIDA2
               THRU 2300-INFORMAR-SALIDA2-EXIT
-
-           PERFORM 2200-ESCRIBIR-FSALIDA1
-              THRU 2200-ESCRIBIR-FSALIDA1-EXIT
 
            PERFORM 2400-ESCRIBIR-FSALIDA2
               THRU 2400-ESCRIBIR-FSALIDA2-EXIT
@@ -195,7 +195,7 @@
            STRING CLASE-VIA-S, CT-SPACE,
                   NOMBRE-VIA-S, CT-SPACE, NUMERO-VIA-S, CT-SPACE,
                   COD-POSTAL-S, CT-SPACE, CIUDAD-S
-           DELIMITED BY SIZE
+           DELIMITED BY '  '
            INTO DIRECCION-CLI-M
            END-STRING
 
@@ -239,15 +239,13 @@
       *
        2300-INFORMAR-SALIDA2.
       *
-           MOVE DNI-CL-S(4:1)       TO NUMERO-ALEA
-
            MOVE NUM-RUT             TO NUM-AGENTE-AGR
            MOVE DNI-RUT             TO DNI-AGR
            MOVE NOMBRE-RUT          TO NOMBRE-AGR
            MOVE APE-1-RUT           TO APE-1-AGR
            MOVE APE-2-RUT           TO APE-2-AGR
            MOVE TLF-RUT             TO TLF-AGR
-           MOVE DNI-CLI-M           TO DNI-CLI-AGR
+           MOVE DNI-CL-S            TO DNI-CLI-AGR
       *
            .
       *
@@ -285,6 +283,10 @@
        2500-LLAMAR-RUTINA.
       *
            DISPLAY 'CALL A LA RUTINA'
+
+           MOVE DNI-CL-S(4:1)       TO NUMERO-ALEA
+           DISPLAY 'DNI COMPLETO:  ' DNI-CL-S
+           DISPLAY 'NUMERO ALEATORIO: ' NUMERO-ALEA
       *
            CALL CT-RUT USING CPRUTCO
       *
@@ -373,6 +375,10 @@
       *
        9000-LEER-FENTRADA.
       *
+           DISPLAY '                                  '
+           DISPLAY '**********************************'
+           DISPLAY '                                  '
+
            READ FENTRADA INTO CPYCLISA
       *
            EVALUATE FS-FENTRADA
