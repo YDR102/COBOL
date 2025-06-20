@@ -95,7 +95,7 @@
       ******************************************************************
        1100-VALIDAR.
       *
-           IF NUM-AGE-RUT = CT-00
+           IF NUM-AGE-RUT(INDEX-TB) = CT-00
                 MOVE CT-10                           TO COD-RETORNO
                 MOVE CT-99                           TO COD-SUBRETORNO
                 MOVE 'VALIDACION'                    TO PARRAFO
