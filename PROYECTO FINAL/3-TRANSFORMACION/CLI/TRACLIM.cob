@@ -52,7 +52,8 @@
            05  CT-00                              PIC X(02) VALUE '00'.
            05  CT-10                              PIC X(02) VALUE '10'.
            05  CT-1                               PIC 9(02) VALUE 1.
-           05  CT-SPACE                           PIC X(02) VALUE ' '.
+           05  CT-SPACE                           PIC X(01) VALUE SPACE.
+           05  CT-RUT                         PIC X(07) VALUE 'RUTAGEN'.
       *
        01  SW-SWITCHES.
            05  SW-FIN-FENTRADA                    PIC X(01).
@@ -72,6 +73,10 @@
       *COPY DEL FICHERO DE ENTRADA FSALIDA2
       *
        COPY MCPAGRFI.
+      *
+      *COPY DEL FICHERO DE ENTRADA RUTINA
+      *
+       COPY CPRUTCO.
       *
       ******************************************************************
       *  PROCEDURE DIVISION                                            *
@@ -217,6 +222,79 @@
            .
       *
        2200-ESCRIBIR-FSALIDA1-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      * 2300-INFORMAR-SALIDA2                                          *
+      ******************************************************************
+      *
+       2300-INFORMAR-SALIDA2.
+      *
+           MOVE DNI-CL-S(4:1)       TO NUMERO-ALEA
+
+           MOVE NUM-RUT             TO NUM-AGENTE-AGR
+           MOVE DNI-RUT             TO DNI-AGR
+           MOVE NOMBRE-RUT          TO NOMBRE-AGR
+           MOVE APE-1-RUT           TO APE-1-AGR
+           MOVE APE-2-RUT           TO APE-2-AGR
+           MOVE TLF-RUT             TO TLF-AGR
+           MOVE DNI-CLI-M           TO DNI-CLI-AGR
+      *
+           .
+      *
+       2300-INFORMAR-SALIDA2-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      * 2400-ESCRIBIR-FSALIDA2                                         *
+      ******************************************************************
+      *
+       2400-ESCRIBIR-FSALIDA2.
+      *
+           WRITE REG-FSALIDA2         FROM DATOS-AGR
+      *
+           IF FS-FSALIDA2 NOT = CT-00
+              DISPLAY 'ERROR AL ESCRIBIR FSALIDA2'
+              DISPLAY 'PARRAFO: 2400-ESCRIBIR-FSALIDA2'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA2
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           ELSE
+              INITIALIZE DATOS-CLI-M
+              ADD CT-1                 TO CN-REG-ESCRIT-FSALIDA2
+           END-IF
+      *
+           .
+      *
+       2400-ESCRIBIR-FSALIDA2-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      *     2500-LLAMAR-RUTINA                                         *
+      * ****************************************************************
+       2500-LLAMAR-RUTINA.
+      *
+           DISPLAY 'CALL A LA RUTINA'
+      *
+           CALL CT-RUT USING CPRUTCO
+      *
+           EVALUATE COD-RETORNO
+              WHEN CT-00
+                   CONTINUE
+              WHEN OTHER
+                   DISPLAY COD-RETORNO
+                   DISPLAY COD-SUBRETORNO
+                   DISPLAY PARRAFO
+                   DISPLAY DESCRIPCION
+                   DISPLAY TABLA
+
+                   PERFORM 3000-FIN
+                      THRU 3000-FIN-EXIT
+           END-EVALUATE
+      *
+           .
+       2500-LLAMAR-RUTINA-EXIT.
            EXIT.
       *
       ******************************************************************
