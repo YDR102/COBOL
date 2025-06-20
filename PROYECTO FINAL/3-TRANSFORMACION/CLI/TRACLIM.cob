@@ -32,9 +32,11 @@
            RECORDING MODE IS F.
        01  REG-FSALIDA1                           PIC X(0694).
       *
+      * CLIENTES
        FD FSALIDA2
            RECORDING MODE IS F.
        01  REG-FSALIDA2                           PIC X(0579).
+      * AGENTES
       *
        WORKING-STORAGE SECTION.
       *

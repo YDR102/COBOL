@@ -11,7 +11,7 @@
       *
        IDENTIFICATION DIVISION.
       *
-       PROGRAM-ID. PGMREPOS.
+       PROGRAM-ID. LOADCLI.
        AUTHOR. DAVID.
        DATE-WRITTEN. 06/06/2025.
       *
@@ -39,7 +39,8 @@
       *
        FD FENTRADA
            RECORDING MODE IS F.
-       01  REG-FENTRADA               PIC X(191).
+       01  REG-FENTRADA               PIC X(0694).
+      * CLIENTES
       *
        WORKING-STORAGE SECTION.
       *

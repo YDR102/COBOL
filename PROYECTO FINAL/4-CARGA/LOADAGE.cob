@@ -11,9 +11,9 @@
       *
        IDENTIFICATION DIVISION.
       *
-       PROGRAM-ID. PGMREPOS.
+       PROGRAM-ID. LOADAGE.
        AUTHOR. DAVID.
-       DATE-WRITTEN. 06/06/2025.
+       DATE-WRITTEN. 20/06/2025.
       *
       ******************************************************************
       ** ENVIRONMENT DIVISION                                         **
@@ -39,20 +39,21 @@
       *
        FD FENTRADA
            RECORDING MODE IS F.
-       01  REG-FENTRADA               PIC X(191).
+       01  REG-FENTRADA                 PIC X(0579).
+      * AGENTES
       *
        WORKING-STORAGE SECTION.
       *
        01  FS-FILE-STATUS.
-           05  FS-FENTRADA            PIC X(02).
+           05  FS-FENTRADA              PIC X(02).
       *
        01  CN-CONTADORES.
-           05  CN-REG-LEIDOS-FENTRADA PIC 9(03).
+           05  CN-REG-LEIDOS-FENTRADA   PIC 9(03).
       *
        01  WK-SQLCODE                   PIC -999.
       *
        01  SW-SWITCHES.
-           05  SW-FIN-FENTRADA        PIC X(01).
+           05  SW-FIN-FENTRADA          PIC X(01).
                88  SW-SI-FIN-FENTRADA VALUE 'S'.
                88  SW-NO-FIN-FENTRADA VALUE 'N'.
       *

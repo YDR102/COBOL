@@ -1,4 +1,4 @@
-//JCLREPOS JOB NOTIFY=&SYSUID
+//LOADJAUT JOB NOTIFY=&SYSUID
 //JOBLIB   DD DSN=DSN810.SDSNLOAD,DISP=SHR
 //         DD DSN=IBMUSER.COBOL.LOAD,DISP=SHR
 //*---------------------------------------------------------------------
