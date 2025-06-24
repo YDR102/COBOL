@@ -19,7 +19,6 @@
 //SYSIN    DD *
  SORT FIELDS=(01,9,CH,A)
 /*
-
 //*---------------------------------------------------------------------
 //EJECUTA  EXEC PGM=IKJEFT01
 //FENTRADA DD DSN=DES.TRANS.HOGAR.MAP.F300519.OR,DISP=SHR
