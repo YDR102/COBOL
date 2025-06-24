@@ -40,7 +40,6 @@
        WORKING-STORAGE SECTION.
       *
        01 CA-CONSTANTES.
-          05 CT-10                     PIC X(02) VALUE '10'.
           05 CT-01                     PIC 9(01) VALUE 1.
           05 CT-00                     PIC X(02) VALUE '00'.
           05 CT-99                     PIC X(02) VALUE '99'.
@@ -98,15 +97,14 @@
       *
            EVALUATE NUMERO-ALEA
                WHEN 0
-                     MOVE CT-10                      TO COD-RETORNO
-                     MOVE CT-99                      TO COD-SUBRETORNO
-                     MOVE 'VALIDACION'               TO PARRAFO
-                     MOVE 'NO PUEDE SER CERO'        TO DESCRIPCION
+                     MOVE CT-99                        TO COD-RETORNO
+                     MOVE 'VALIDACION'                 TO PARRAFO
+                     MOVE 'NUM ALEA ES 0, CORRIGIENDO' TO DESCRIPCION
+                     MOVE 1                            TO NUMERO-ALEA
                WHEN SPACES
-                     MOVE CT-88                      TO COD-RETORNO
-                     MOVE CT-00                      TO COD-SUBRETORNO
-                     MOVE 'VALIDACION'               TO PARRAFO
-                     MOVE 'NO PUEDE SER VACIO'       TO DESCRIPCION
+                     MOVE CT-88                        TO COD-RETORNO
+                     MOVE 'VALIDACION'                 TO PARRAFO
+                     MOVE 'NO PUEDE SER VACIO'         TO DESCRIPCION
                WHEN OTHER
                      CONTINUE
                      DISPLAY 'NUMERO ALEATORIO RUT: ' NUMERO-ALEA

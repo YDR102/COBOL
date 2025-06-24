@@ -74,9 +74,10 @@
            05  CT-00                              PIC X(02) VALUE '00'.
            05  CT-10                              PIC X(02) VALUE '10'.
            05  CT-1                               PIC 9(02) VALUE 1.
+           05  CT-RUT                        PIC X(08) VALUE 'RUTCONT'.
       *
        01  SW-SWITCHES.
-           05  SW-FIN-FENTRADA                    PIC X(01).
+           05  SW-FIN-FENTRADA               PIC X(01).
                88  SW-SI-FIN-FENTRADA                       VALUE 'S'.
                88  SW-NO-FIN-FENTRADA                       VALUE 'N'.
       *
@@ -98,6 +99,10 @@
       *COPY DEL FICHERO DE ENTRADA FSALIDA3 - HOGAR
       *
        COPY MCPHOGFI.
+      *
+      *COPY DE RUTINA
+      *
+       COPY RUTCONT.
       *
       ******************************************************************
       ** PROCEDURE DIVISION                                           **
@@ -201,27 +206,37 @@
       *
        2000-PROCESO.
       *
+
            EVALUATE TIPO-SEG
                WHEN  '01'
                    PERFORM 2100-INFORMAR-SALIDA-1
                       THRU 2100-INFORMAR-SALIDA-1-EXIT
 
-                   PERFORM 2200-ESCRIBIR-FSALIDA-1
-                      THRU 2200-ESCRIBIR-FSALIDA-1-EXIT
+                   PERFORM 2400-LLAMAR-RUTINA
+                      THRU 2400-LLAMAR-RUTINA-EXIT
+
+                   PERFORM 2150-ESCRIBIR-FSALIDA-1
+                      THRU 2150-ESCRIBIR-FSALIDA-1-EXIT
                    CONTINUE
                WHEN  '02'
-                   PERFORM 2100-INFORMAR-SALIDA-3
-                      THRU 2100-INFORMAR-SALIDA-3-EXIT
+                   PERFORM 2300-INFORMAR-SALIDA-3
+                      THRU 2300-INFORMAR-SALIDA-3-EXIT
 
-                   PERFORM 2200-ESCRIBIR-FSALIDA-3
-                      THRU 2200-ESCRIBIR-FSALIDA-3-EXIT
+                   PERFORM 2400-LLAMAR-RUTINA
+                      THRU 2400-LLAMAR-RUTINA-EXIT
+
+                   PERFORM 2350-ESCRIBIR-FSALIDA-3
+                      THRU 2350-ESCRIBIR-FSALIDA-3-EXIT
                    CONTINUE
                WHEN  '03'
-                   PERFORM 2100-INFORMAR-SALIDA-2
-                      THRU 2100-INFORMAR-SALIDA-2-EXIT
+                   PERFORM 2200-INFORMAR-SALIDA-2
+                      THRU 2200-INFORMAR-SALIDA-2-EXIT
 
-                   PERFORM 2200-ESCRIBIR-FSALIDA-2
-                      THRU 2200-ESCRIBIR-FSALIDA-2-EXIT
+                   PERFORM 2400-LLAMAR-RUTINA
+                      THRU 2400-LLAMAR-RUTINA-EXIT
+
+                   PERFORM 2250-ESCRIBIR-FSALIDA-2
+                      THRU 2250-ESCRIBIR-FSALIDA-2-EXIT
                    CONTINUE
                WHEN OTHER
                      DISPLAY 'TIPO DE SEGURO NO VÁLIDO: ' TIPO-SEG
@@ -265,6 +280,8 @@
            INTO PRIMA-VID
            END-UNSTRING.
 
+           MOVE PRIMA-VID                 TO IMPORT-ORIG
+      *
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-VID
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-VID
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-VID
@@ -282,16 +299,16 @@
            EXIT.
       *
       ******************************************************************
-      * 2200-ESCRIBIR-FSALIDA-1                                        *
+      * 2150-ESCRIBIR-FSALIDA-1                                        *
       ******************************************************************
       *
-       2200-ESCRIBIR-FSALIDA-1.
+       2150-ESCRIBIR-FSALIDA-1.
       *
            WRITE REG-FSALIDA1        FROM DATOS-VID
       *
            IF FS-FSALIDA1 NOT = CT-00
               DISPLAY 'ERROR AL ESCRIBIR FSALIDA1'
-              DISPLAY 'PARRAFO: 2200-ESCRIBIR-FSALIDA-1'
+              DISPLAY 'PARRAFO: 2150-ESCRIBIR-FSALIDA-1'
               DISPLAY 'FILE STATUS: ' FS-FSALIDA1
       *
               PERFORM 3000-FIN
@@ -303,14 +320,14 @@
       *
            .
       *
-       2200-ESCRIBIR-FSALIDA-1-EXIT.
+       2150-ESCRIBIR-FSALIDA-1-EXIT.
            EXIT.
       *
       ******************************************************************
-      * 2100-INFORMAR-SALIDA-2          -- AUTO --                     *
+      * 2200-INFORMAR-SALIDA-2          -- AUTO --                     *
       ******************************************************************
       *
-       2100-INFORMAR-SALIDA-2.
+       2200-INFORMAR-SALIDA-2.
       *
            INITIALIZE PRIMA-ACU
                       COBERTURA1-ACU
@@ -333,9 +350,11 @@
            END-STRING
 
            UNSTRING PRIMA-ACU DELIMITED BY ' '
-           INTO PRIMA-AUT
+           INTO PRIMA-AUT, DIV-ORIG
            END-UNSTRING.
 
+           MOVE PRIMA-AUT                 TO IMPORT-ORIG
+      *
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-AUT
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-AUT
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-AUT
@@ -350,14 +369,14 @@
       *
            .
       *
-       2100-INFORMAR-SALIDA-2-EXIT.
+       2200-INFORMAR-SALIDA-2-EXIT.
            EXIT.
       *
       ******************************************************************
-      * 2200-ESCRIBIR-FSALIDA-2                                        *
+      * 2250-ESCRIBIR-FSALIDA-2                                        *
       ******************************************************************
       *
-       2200-ESCRIBIR-FSALIDA-2.
+       2250-ESCRIBIR-FSALIDA-2.
       *
            WRITE REG-FSALIDA2        FROM DATOS-AUT
       *
@@ -375,14 +394,14 @@
       *
            .
       *
-       2200-ESCRIBIR-FSALIDA-2-EXIT.
+       2250-ESCRIBIR-FSALIDA-2-EXIT.
            EXIT.
       *
       ******************************************************************
-      * 2100-INFORMAR-SALIDA-3              -- HOGAR --                *
+      * 2300-INFORMAR-SALIDA-3              -- HOGAR --                *
       ******************************************************************
       *
-       2100-INFORMAR-SALIDA-3.
+       2300-INFORMAR-SALIDA-3.
       *
            INITIALIZE PRIMA-ACU
                       CONTENIDO-ACU
@@ -414,6 +433,8 @@
            INTO PRIMA-HOG
            END-UNSTRING.
 
+           MOVE PRIMA-HOG                 TO IMPORT-ORIG
+      *
            MOVE NUMERO-POLIZA-SEG         TO POLIZA-HOG
            MOVE FECHA-INICIO-SEG          TO FECHA-INICIO-HOG
            MOVE FECHA-VENCIMIENTO-SEG     TO FECHA-VENCIMIENTO-HOG
@@ -427,14 +448,14 @@
            DISPLAY FECHA-VENCIMIENTO-HOG
            .
       *
-       2100-INFORMAR-SALIDA-3-EXIT.
+       2300-INFORMAR-SALIDA-3-EXIT.
            EXIT.
       *
       ******************************************************************
-      * 2200-ESCRIBIR-FSALIDA-3                                        *
+      * 2350-ESCRIBIR-FSALIDA-3                                        *
       ******************************************************************
       *
-       2200-ESCRIBIR-FSALIDA-3.
+       2350-ESCRIBIR-FSALIDA-3.
       *
            WRITE REG-FSALIDA3        FROM DATOS-HOG
       *
@@ -452,7 +473,28 @@
       *
            .
       *
-       2200-ESCRIBIR-FSALIDA-3-EXIT.
+       2350-ESCRIBIR-FSALIDA-3-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      *     2400-LLAMAR-RUTINA                                         *
+      * ****************************************************************
+       2400-LLAMAR-RUTINA.
+      *
+           DISPLAY 'CALL A LA RUTINA'
+      *
+           CALL 'RUTCONT' USING RUTCONT
+      *
+           EVALUATE COD-RETORNO
+              WHEN CT-00
+                  CONTINUE
+              WHEN OTHER
+                   PERFORM 3000-FIN
+                      THRU 3000-FIN-EXIT
+           END-EVALUATE
+      *
+           .
+       2400-LLAMAR-RUTINA-EXIT.
            EXIT.
       *
       ******************************************************************
