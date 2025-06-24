@@ -4,9 +4,9 @@
       *
        IDENTIFICATION DIVISION.
       *
-       PROGRAM-ID. PGMDIVIS.
+       PROGRAM-ID. RUTCONT.
        AUTHOR. DAVID.
-       DATE-WRITTEN. 02/05/2025.
+       DATE-WRITTEN. 24/06/2025.
       *
       ******************************************************************
       ** ENVIRONMENT DIVISION                                         **
@@ -52,13 +52,13 @@
       ******************************************************************
        LINKAGE SECTION.
       * ESTRUCTURA DE COMUNICACION DE MI RUTINA
-       COPY RUTCONT.
+       COPY CPYRCONT.
       *
       ******************************************************************
       ** PROCEDURE DIVISION                                           **
       ******************************************************************
       *
-       PROCEDURE DIVISION USING RUTCONT.
+       PROCEDURE DIVISION USING CPYRCONT.
       *
            PERFORM 1000-INICIO
               THRU 1000-INICIO-EXIT
@@ -81,6 +81,9 @@
       *
            INITIALIZE ERRORES-RUT
                       SALIDA-RUT
+      *
+           MOVE CT-00 TO COD-RETORNO
+
       *
            PERFORM 1200-INF-TABLA-WORKING
               THRU 1200-INF-TABLA-WORKING-EXIT

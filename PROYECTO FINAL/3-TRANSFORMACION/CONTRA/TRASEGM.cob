@@ -102,7 +102,7 @@
       *
       *COPY DE RUTINA
       *
-       COPY RUTCONT.
+       COPY CPYRCONT.
       *
       ******************************************************************
       ** PROCEDURE DIVISION                                           **
@@ -277,7 +277,7 @@
            END-STRING
 
            UNSTRING PRIMA-ACU DELIMITED BY ' '
-           INTO PRIMA-VID
+           INTO PRIMA-VID, DIV-ORIG
            END-UNSTRING.
 
            MOVE PRIMA-VID                 TO IMPORT-ORIG
@@ -304,6 +304,7 @@
       *
        2150-ESCRIBIR-FSALIDA-1.
       *
+           MOVE IMPORT-DEST TO PRIMA-VID
            WRITE REG-FSALIDA1        FROM DATOS-VID
       *
            IF FS-FSALIDA1 NOT = CT-00
@@ -378,6 +379,7 @@
       *
        2250-ESCRIBIR-FSALIDA-2.
       *
+           MOVE IMPORT-DEST TO PRIMA-AUT
            WRITE REG-FSALIDA2        FROM DATOS-AUT
       *
            IF FS-FSALIDA1 NOT = CT-00
@@ -430,7 +432,7 @@
            END-UNSTRING.
 
            UNSTRING PRIMA-ACU DELIMITED BY ' '
-           INTO PRIMA-HOG
+           INTO PRIMA-HOG, DIV-ORIG
            END-UNSTRING.
 
            MOVE PRIMA-HOG                 TO IMPORT-ORIG
@@ -457,6 +459,7 @@
       *
        2350-ESCRIBIR-FSALIDA-3.
       *
+           MOVE IMPORT-DEST TO PRIMA-HOG
            WRITE REG-FSALIDA3        FROM DATOS-HOG
       *
            IF FS-FSALIDA3 NOT = CT-00
@@ -483,12 +486,16 @@
       *
            DISPLAY 'CALL A LA RUTINA'
       *
-           CALL 'RUTCONT' USING RUTCONT
+           CALL CT-RUT USING CPYRCONT
       *
            EVALUATE COD-RETORNO
               WHEN CT-00
-                  CONTINUE
+                  DISPLAY 'RUTINA LLAMADA CORRECTAMENTE'
+                  DISPLAY '******************************************'
+                  DISPLAY '                                          '
               WHEN OTHER
+                   DISPLAY 'CODIGO DE RETORNO: ' COD-RETORNO
+                   DISPLAY 'ERROR EN LA RUTINA'
                    PERFORM 3000-FIN
                       THRU 3000-FIN-EXIT
            END-EVALUATE

@@ -1,4 +1,4 @@
-       01 RUTCONT.
+       01 CPYRCONT.
            05 ENTRADA-RUT.
                 10 IMPORT-ORIG                PIC S9(15)V9(02).
                 10 DIV-ORIG                   PIC X(03).
