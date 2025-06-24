@@ -349,8 +349,8 @@
                       ,PRIMA
                       ,EDAD
                       ,COBERTURAS
-                      ,FECHA-INICIO
-                      ,FECHA-VENCIMIENTO)
+                      ,FECHA_INICIO
+                      ,FECHA_VENCIMIENTO)
                       VALUES(
                        :TB-POLIZA
                       ,:TB-PRIMA
