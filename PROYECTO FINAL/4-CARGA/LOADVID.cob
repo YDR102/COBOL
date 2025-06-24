@@ -344,7 +344,7 @@
            MOVE POLIZA-VID                  TO TB-POLIZA
            MOVE PRIMA-VID                   TO TB-PRIMA
            MOVE EDAD-VID                    TO TB-EDAD
-           MOVE COBERTURAS-VID              TO TB-COBERTURAS
+           MOVE COBERTURAS-VID              TO TB-COBERTURAS-TEXT
            MOVE FECHA-INICIO-VID            TO TB-FECHA-INICIO
            MOVE FECHA-VENCIMIENTO-VID       TO TB-FECHA-VENCIMIENTO
       *
@@ -360,7 +360,7 @@
                        :TB-POLIZA
                       ,:TB-PRIMA
                       ,:TB-EDAD
-                      ,:TB-COBERTURAS
+                      ,:TB-COBERTURAS-TEXT
                       ,:TB-FECHA-INICIO
                       ,:TB-FECHA-VENCIMIENTO)
            END-EXEC

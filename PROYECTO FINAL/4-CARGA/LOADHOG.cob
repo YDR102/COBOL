@@ -344,7 +344,7 @@
            MOVE PRIMA-HOG                   TO TB-PRIMA
            MOVE CONTINENTE-HOG              TO TB-CONTENIENTE
            MOVE CONTENIDO-HOG               TO TB-CONTENIDO
-           MOVE COBERTURAS-HOG              TO TB-COBERTURAS
+           MOVE COBERTURAS-HOG              TO TB-COBERTURAS-TEXT
            MOVE FECHA-INICIO-HOG            TO TB-FECHA-INICIO
            MOVE FECHA-VENCIMIENTO-HOG       TO TB-FECHA-VENCIMIENTO
       *
@@ -362,7 +362,7 @@
                       ,:TB-PRIMA
                       ,:TB-CONTENIENTE
                       ,:TB-CONTENIDO
-                      ,:TB-COBERTURAS
+                      ,:TB-COBERTURAS-TEXT
                       ,:TB-FECHA-INICIO
                       ,:TB-FECHA-VENCIMIENTO)
            END-EXEC
