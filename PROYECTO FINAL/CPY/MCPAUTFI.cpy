@@ -1,3 +1,4 @@
+      * LENGTH:  579
        01 DATOS-AUT.
            05 POLIZA-AUT              PIC X(9).
            05 PRIMA-AUT               PIC 9(15)V9(02).

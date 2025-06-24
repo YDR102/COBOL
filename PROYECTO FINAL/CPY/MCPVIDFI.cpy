@@ -1,3 +1,4 @@
+      * LENGTH: 549
        01 DATOS-VID.
            05 POLIZA-VID              PIC X(9).
            05 PRIMA-VID               PIC 9(15)V9(02).

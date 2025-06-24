@@ -1,3 +1,4 @@
+      * LENGTH: 2540
        01 DATOS-SEG.
           05 NUMERO-POLIZA-SEG         PIC X(9).
           05 TIPO-SEG                  PIC X(2).

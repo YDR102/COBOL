@@ -1,3 +1,4 @@
+      * LENGTH: 112
        01 DATOS-AGR.
            05 NUM-AGENTE-AGR    PIC X(9).
            05 DNI-AGR           PIC X(9).

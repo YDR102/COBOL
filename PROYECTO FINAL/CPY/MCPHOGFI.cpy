@@ -1,3 +1,4 @@
+      * LENGTH:  580
        01 DATOS-HOG.
            05 POLIZA-HOG              PIC X(9).
            05 PRIMA-HOG               PIC 9(15)V9(02).

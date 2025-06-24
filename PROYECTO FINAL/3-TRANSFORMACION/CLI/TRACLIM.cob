@@ -26,16 +26,16 @@
        FD FENTRADA
            RECORDING MODE IS F.
        01  REG-FENTRADA                           PIC X(0713).
-      *    SEGURO
+      *    CLIENTES
       *
        FD FSALIDA1
            RECORDING MODE IS F.
-       01  REG-FSALIDA1                           PIC X(0694).
+       01  REG-FSALIDA1                           PIC X(0744).
       *
       * CLIENTES
        FD FSALIDA2
            RECORDING MODE IS F.
-       01  REG-FSALIDA2                           PIC X(0579).
+       01  REG-FSALIDA2                           PIC X(0112).
       * AGENTES
       *
        WORKING-STORAGE SECTION.

@@ -1,3 +1,4 @@
+      * LENGTH:  108
        01 DATOS-SIN.
            05 ID-SINIETRO-SIN         PIC S9(9).
            05 FECHA-SINIESTRO-SIN     PIC X(10).

@@ -30,10 +30,12 @@
        FD ENTRADA1
            RECORDING MODE IS F.
        01  REG-ENTRADA1                                     PIC X(0043).
+      * COMAPANIAS
       *
        FD ENTRADA2
            RECORDING MODE IS F.
        01  REG-ENTRADA2                                     PIC X(2540).
+      * SEGUROS
       *
        FD FSALIDA
            RECORDING MODE IS F.

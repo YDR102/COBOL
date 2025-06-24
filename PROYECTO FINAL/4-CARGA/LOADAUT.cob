@@ -1,7 +1,7 @@
       ******************************************************************
       ** P G M R E P O S.-PGM CON RESPOSICIONAMIENTO QUE LEE LOS      **
       **                  REGISTROS DEL FICHERO DE ENTRADA CON INFO   **
-      **                  DE EMPLEADOS Y LOS INSERTA POSTERIORMENTE   **
+      **                  DE AUTO Y LOS INSERTA POSTERIORMENTE        **
       **                  EN BBDD.                                    **
       ******************************************************************
       *
@@ -64,6 +64,8 @@
            05 CT-00                   PIC X(02) VALUE '00'.
            05 CT-10                   PIC X(02) VALUE '10'.
            05 WK-SQLCODE              PIC -999.
+           05 DAREPOS                 PIC X(20) VALUE 'DAREPOS'.
+           05 TABLA                   PIC X(20) VALUE 'AUTOS_MAPFRE'.
 
       *
        01  SW-SWITCHES.
@@ -216,7 +218,7 @@
                         WHEN OTHER
                              DISPLAY 'ERROR: ESTADO INCORRECTO EN DAREP'
                              DISPLAY 'PARRAFO: 1200-CONSULTAR-DAREPOS'
-                             DISPLAY 'TABLA: DAREPOS'
+                             DISPLAY 'TABLA: ' DAREPOS
       *
                              PERFORM 2300-ESCRIBIR-FSALIDA
                                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -233,7 +235,7 @@
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 1200-CONSULTAR-DAREPOS'
-                    DISPLAY 'TABLA: DAREPOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
@@ -277,7 +279,7 @@
                WHEN -803
                     DISPLAY 'ERROR: REG. DUPLICADO EN BBDD'
                     DISPLAY 'PARRAFO: 1210-INSERTAR-DAREPOS'
-                    DISPLAY 'TABLA: DAREPOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
@@ -288,7 +290,7 @@
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 1210-INSERTAR-DAREPOS'
-                    DISPLAY 'TABLA: DAREPOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
@@ -305,15 +307,15 @@
       *
       ******************************************************************
       ** 2000-PROCESO                                                 **
-      ** INSERTAMOS EL ULTIMO REGISTRO EN LA TABLA EMPLEADOS. A       **
+      ** INSERTAMOS EL ULTIMO REGISTRO EN LA TABLA AUTO. A            **
       ** CONTINUACION ACTUALIZAMOS LA DAREPOS CON EL VALOR CLAVE DEL  **
-      ** REGISTRO QUE ACABAMOS DE INSERTAR EN LA TABLA EMPLEADOS.     **
+      ** REGISTRO QUE ACABAMOS DE INSERTAR EN LA TABLA AUTO.          **
       ******************************************************************
       *
        2000-PROCESO.
       *
-           PERFORM 2100-INSERT-EMPLEADOS
-              THRU 2100-INSERT-EMPLEADOS-EXIT
+           PERFORM 2100-INSERT-AUTO
+              THRU 2100-INSERT-AUTO-EXIT
       *
            PERFORM 2200-UPDATE-DAREPOS
               THRU 2200-UPDATE-DAREPOS-EXIT
@@ -327,12 +329,12 @@
            EXIT.
       *
       ******************************************************************
-      ** 2100-INSERT-EMPLEADOS                                        **
-      ** INSERTAMOS EL REGISTRO LEIDO DEL FICHERO EN LA TABLA EMPLEADOS*
+      ** 2100-INSERT-AUTO                                             **
+      ** INSERTAMOS EL REGISTRO LEIDO DEL FICHERO EN LA TABLA AUTO    **
       ** CONTROLANDO POSTERIORMENTE SU SQLCODE.                       **
       ******************************************************************
       *
-       2100-INSERT-EMPLEADOS.
+       2100-INSERT-AUTO.
       *
            MOVE POLIZA-AUT                  TO TB-POLIZA
            MOVE PRIMA-AUT                   TO TB-PRIMA
@@ -366,8 +368,8 @@
                     ADD 1                  TO CN-REG-INSERT-BASE
                WHEN -803
                     DISPLAY 'ERROR: REG. DUPLICADO EN BBDD'
-                    DISPLAY 'PARRAFO: 2100-INSERT-EMPLEADOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'PARRAFO: 2100-INSERT-' TABLA
+                    DISPLAY 'TABLA: ' TABLA
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                 PERFORM 2300-ESCRIBIR-FSALIDA
@@ -377,8 +379,8 @@
                    THRU 3000-FIN-EXIT
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
-                    DISPLAY 'PARRAFO: 2100-INSERT-EMPLEADOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'PARRAFO: 2100-INSERT-' TABLA
+                    DISPLAY 'TABLA: ' TABLA
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
@@ -390,13 +392,13 @@
       *
            .
       *
-       2100-INSERT-EMPLEADOS-EXIT.
+       2100-INSERT-AUTO-EXIT.
            EXIT.
       *
       ******************************************************************
       ** 2200-UPDATE-DAREPOS                                          **
-      ** ACTUALIZAMOS EL VALOR DE LA CLAVE EN LA DAREPOS CON LA        *
-      ** MATRICULA QUE ACABAMOS DE INSSERTAR EN LA TABLA EMPLEADOS.   **
+      ** ACTUALIZAMOS EL VALOR DE LA CLAVE EN LA DAREPOS CON LA       **
+      ** MATRICULA QUE ACABAMOS DE INSSERTAR EN LA TABLA AUTO.        **
       ******************************************************************
       *
        2200-UPDATE-DAREPOS.
@@ -421,7 +423,7 @@
                WHEN 100
                     DISPLAY 'ERROR: REG. NO ENCONTRADO EN BBDD'
                     DISPLAY 'PARRAFO: 2200-UPDATE-DAREPOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
@@ -432,7 +434,7 @@
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 2200-UPDATE-DAREPOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
@@ -613,7 +615,7 @@
                WHEN 100
                     DISPLAY 'ERROR: REG. NO ENCONTRADO EN BBDD'
                     DISPLAY 'PARRAFO: 9100-UPDATE-DAREPOS-OK'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
@@ -624,7 +626,7 @@
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 9100-UPDATE-DAREPOS-OK'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA

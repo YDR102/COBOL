@@ -1,7 +1,7 @@
       ******************************************************************
       ** P G M R E P O S.-PGM CON RESPOSICIONAMIENTO QUE LEE LOS      **
       **                  REGISTROS DEL FICHERO DE ENTRADA CON INFO   **
-      **                  DE EMPLEADOS Y LOS INSERTA POSTERIORMENTE   **
+      **                  DE AGENTES Y LOS INSERTA POSTERIORMENTE     **
       **                  EN BBDD.                                    **
       ******************************************************************
       *
@@ -28,6 +28,8 @@
        FILE-CONTROL.
            SELECT FENTRADA ASSIGN TO FENTRADA
            FILE STATUS FS-FENTRADA.
+           SELECT FSALIDA ASSIGN TO FSALIDA
+           FILE STATUS FS-FSALIDA.
       *
       ******************************************************************
       ** DATA DIVISION                                                **
@@ -39,26 +41,39 @@
       *
        FD FENTRADA
            RECORDING MODE IS F.
-       01  REG-FENTRADA                 PIC X(0579).
+       01  REG-FENTRADA                 PIC X(0112).
       * AGENTES
       *
+       FD FSALIDA
+           RECORDING MODE IS F.
+       01  REG-FSALIDA               PIC X(0112).
+      * DESCARTES
        WORKING-STORAGE SECTION.
       *
        01  FS-FILE-STATUS.
-           05  FS-FENTRADA              PIC X(02).
+           05  FS-FENTRADA            PIC X(02).
+           05  FS-FSALIDA             PIC X(02).
       *
        01  CN-CONTADORES.
-           05  CN-REG-LEIDOS-FENTRADA   PIC 9(03).
+           05  CN-REG-LEIDOS-FENTRADA PIC 9(03).
+           05  CN-REG-ESCRIT-FSALIDA  PIC 9(03).
+           05  CN-REG-INSERT-BASE     PIC 9(03).
       *
-       01  WK-SQLCODE                   PIC -999.
+       01  VARIABLES.
+           05 CT-00                   PIC X(02) VALUE '00'.
+           05 CT-10                   PIC X(02) VALUE '10'.
+           05 WK-SQLCODE              PIC -999.
+           05 DAREPOS                 PIC X(20) VALUE 'DAREPOS'.
+           05 TABLA                   PIC X(20) VALUE 'AGENTES_MAPFRE'.
+
       *
        01  SW-SWITCHES.
-           05  SW-FIN-FENTRADA          PIC X(01).
+           05  SW-FIN-FENTRADA        PIC X(01).
                88  SW-SI-FIN-FENTRADA VALUE 'S'.
                88  SW-NO-FIN-FENTRADA VALUE 'N'.
       *
       *COPY DEL FICHERO DE ENTRADA FENTRADA
-       COPY CPYEREPO.
+       COPY MCPAGRFI.
       *
       *---------------SQLCA---------------*
       *
@@ -66,10 +81,10 @@
               INCLUDE SQLCA
            END-EXEC.
       *
-      *--------DCLGEN EMPLEADOS-----------*
+      *--------DCLGEN SEG.AUTOS-----------*
       *
            EXEC SQL
-              INCLUDE TBEMPLE
+              INCLUDE TBAGEFIN
            END-EXEC.
       *
       *--------DCLGEN DAREPOS-------------*
@@ -106,8 +121,8 @@
       *
            INITIALIZE FS-FILE-STATUS
                       CN-CONTADORES
-                      CPY-CPYEREPO
-                      DCLEMPLEADOS
+                      DATOS-AGR
+                      DCLAGENTES-MAPFRE
                       DCLDAREPOS
       *
            SET SW-NO-FIN-FENTRADA        TO TRUE
@@ -131,13 +146,29 @@
       *
        1100-ABRIR-FICHEROS.
       *
-           OPEN INPUT  FENTRADA
+           OPEN INPUT FENTRADA
+           OPEN OUTPUT FSALIDA
       *
-           IF FS-FENTRADA NOT = '00'
+           IF FS-FENTRADA NOT = CT-00
               DISPLAY 'ERROR AL ABRIR EL FICHERO FENTRADA'
               DISPLAY 'PARRAFO: 1100-ABRIR-FICHEROS'
               DISPLAY 'NOMBRE FICHERO: FENTRADA'
               DISPLAY 'FILE STATUS: ' FS-FENTRADA
+      *
+              PERFORM 2300-ESCRIBIR-FSALIDA
+                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           END-IF
+      *
+           IF FS-FSALIDA NOT = CT-00
+              DISPLAY 'ERROR AL ABRIR FSALIDA'
+              DISPLAY 'PARRAFO: 1100-ABRIR-FICHEROS'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA
+      *
+              PERFORM 2300-ESCRIBIR-FSALIDA
+                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
@@ -162,7 +193,7 @@
       *
        1200-CONSULTAR-DAREPOS.
       *
-           MOVE 'PGMREPOS'                  TO TB-NOMBRE-PGM
+           MOVE 'LOADAGE'                  TO TB-NOMBRE-PGM
       *
            EXEC SQL
                SELECT ESTADO
@@ -179,14 +210,17 @@
                         WHEN 'KO'
                              PERFORM 9000-LEER-FENTRADA
                                 THRU 9000-LEER-FENTRADA-EXIT
-                               UNTIL MATRICULA-E > TB-VALOR-CLAVE-TEXT
+                               UNTIL DNI-CLI-AGR > TB-VALOR-CLAVE-TEXT
                         WHEN 'OK'
                              PERFORM 9000-LEER-FENTRADA
                                 THRU 9000-LEER-FENTRADA-EXIT
                         WHEN OTHER
                              DISPLAY 'ERROR: ESTADO INCORRECTO EN DAREP'
                              DISPLAY 'PARRAFO: 1200-CONSULTAR-DAREPOS'
-                             DISPLAY 'TABLA: DAREPOS'
+                             DISPLAY 'TABLA: ' DAREPOS
+      *
+                             PERFORM 2300-ESCRIBIR-FSALIDA
+                                THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                              PERFORM 3000-FIN
                                 THRU 3000-FIN-EXIT
@@ -200,8 +234,11 @@
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 1200-CONSULTAR-DAREPOS'
-                    DISPLAY 'TABLA: DAREPOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
@@ -241,16 +278,22 @@
                WHEN -803
                     DISPLAY 'ERROR: REG. DUPLICADO EN BBDD'
                     DISPLAY 'PARRAFO: 1210-INSERTAR-DAREPOS'
-                    DISPLAY 'TABLA: DAREPOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 1210-INSERTAR-DAREPOS'
-                    DISPLAY 'TABLA: DAREPOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
@@ -263,15 +306,15 @@
       *
       ******************************************************************
       ** 2000-PROCESO                                                 **
-      ** INSERTAMOS EL ULTIMO REGISTRO EN LA TABLA EMPLEADOS. A       **
+      ** INSERTAMOS EL ULTIMO REGISTRO EN LA TABLA AGENTES. A         **
       ** CONTINUACION ACTUALIZAMOS LA DAREPOS CON EL VALOR CLAVE DEL  **
-      ** REGISTRO QUE ACABAMOS DE INSERTAR EN LA TABLA EMPLEADOS.     **
+      ** REGISTRO QUE ACABAMOS DE INSERTAR EN LA TABLA AGENTES.       **
       ******************************************************************
       *
        2000-PROCESO.
       *
-           PERFORM 2100-INSERT-EMPLEADOS
-              THRU 2100-INSERT-EMPLEADOS-EXIT
+           PERFORM 2100-INSERT-AGENTES
+              THRU 2100-INSERT-AGENTES-EXIT
       *
            PERFORM 2200-UPDATE-DAREPOS
               THRU 2200-UPDATE-DAREPOS-EXIT
@@ -285,82 +328,82 @@
            EXIT.
       *
       ******************************************************************
-      ** 2100-INSERT-EMPLEADOS                                        **
-      ** INSERTAMOS EL REGISTRO LEIDO DEL FICHERO EN LA TABLA EMPLEADOS*
+      ** 2100-INSERT-AGENTES                                          **
+      ** INSERTAMOS EL REGISTRO LEIDO DEL FICHERO EN LA TABLA AGENTES **
       ** CONTROLANDO POSTERIORMENTE SU SQLCODE.                       **
       ******************************************************************
       *
-       2100-INSERT-EMPLEADOS.
+       2100-INSERT-AGENTES.
       *
-           MOVE MATRICULA-E                 TO TB-MATRICULA
-           MOVE APELLIDO-E                  TO TB-APELLIDO
-           MOVE NOMBRE-E                    TO TB-NOMBRE
-           MOVE CATEGORIA-E                 TO TB-CATEGORIA
-           MOVE DEPARTAMENTO-E              TO TB-DEPARTAMENTO
-           MOVE SECCION-E                   TO TB-SECCION
-           MOVE SALARIO-E                   TO TB-SALARIO
-           MOVE FECHA-ING-E                 TO TB-FECHA-INGRESO
-           MOVE FECHA-NAC-E                 TO TB-FECHA-NACIMIENTO
+           MOVE NUM-AGENTE-AGR    TO TB-NUM-AGENTE
+           MOVE DNI-AGR           TO TB-DNI-AG
+           MOVE NOMBRE-AGR        TO TB-NOMBRE
+           MOVE APE-1-AGR         TO TB-APE-1
+           MOVE APE-2-AGR         TO TB-APE-2
+           MOVE TLF-AGR           TO TB-TELEFONO
+           MOVE DNI-CLI-AGR       TO TB-DNI-CLI
       *
            EXEC SQL
-               INSERT INTO EMPLEADOS
-                      (MATRICULA
-                      ,APELLIDO
+               INSERT INTO AGENTES_MAPFRE
+                      (NUM_AGENTE
+                      ,DNI_AG
                       ,NOMBRE
-                      ,CATEGORIA
-                      ,DEPARTAMENTO
-                      ,SECCION
-                      ,SALARIO
-                      ,FECHA_ING
-                      ,FECHA_NAC)
+                      ,APE_1
+                      ,APE_2
+                      ,TELEFONO
+                      ,DNI_CLI)
                       VALUES(
-                       :TB-MATRICULA
-                      ,:TB-APELLIDO
+                       :TB-NUM-AGENTE
+                      ,:TB-DNI-AG
                       ,:TB-NOMBRE
-                      ,:TB-CATEGORIA
-                      ,:TB-DEPARTAMENTO
-                      ,:TB-SECCION
-                      ,:TB-SALARIO
-                      ,:TB-FECHA-INGRESO
-                      ,:TB-FECHA-NACIMIENTO)
+                      ,:TB-APE-1
+                      ,:TB-APE-2
+                      ,:TB-TELEFONO
+                      ,:TB-DNI-CLI)
            END-EXEC
       *
            EVALUATE SQLCODE
                WHEN 0
-                    CONTINUE
+                    ADD 1                  TO CN-REG-INSERT-BASE
                WHEN -803
                     DISPLAY 'ERROR: REG. DUPLICADO EN BBDD'
-                    DISPLAY 'PARRAFO: 2100-INSERT-EMPLEADOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'PARRAFO: 2100-INSERT-AGENTES'
+                    DISPLAY 'TABLA: ' TABLA
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
-                    PERFORM 3000-FIN
-                       THRU 3000-FIN-EXIT
+                PERFORM 2300-ESCRIBIR-FSALIDA
+                   THRU 2300-ESCRIBIR-FSALIDA-EXIT
+
+                PERFORM 3000-FIN
+                   THRU 3000-FIN-EXIT
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
-                    DISPLAY 'PARRAFO: 2100-INSERT-EMPLEADOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'PARRAFO: 2100-INSERT-AGENTES'
+                    DISPLAY 'TABLA: ' TABLA
                     DISPLAY 'SQLCODE: ' SQLCODE
       *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
+
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
            END-EVALUATE
       *
            .
       *
-       2100-INSERT-EMPLEADOS-EXIT.
+       2100-INSERT-AGENTES-EXIT.
            EXIT.
       *
       ******************************************************************
       ** 2200-UPDATE-DAREPOS                                          **
-      ** ACTUALIZAMOS EL VALOR DE LA CLAVE EN LA DAREPOS CON LA        *
-      ** MATRICULA QUE ACABAMOS DE INSSERTAR EN LA TABLA EMPLEADOS.   **
+      ** ACTUALIZAMOS EL VALOR DE LA CLAVE EN LA DAREPOS CON LA       **
+      ** MATRICULA QUE ACABAMOS DE INSSERTAR EN LA TABLA AGENTES.     **
       ******************************************************************
       *
        2200-UPDATE-DAREPOS.
       *
            MOVE 'KO'                        TO TB-ESTADO
-           MOVE MATRICULA-E                 TO TB-VALOR-CLAVE-TEXT
+           MOVE DNI-CLI-AGR                 TO TB-VALOR-CLAVE-TEXT
            COMPUTE TB-VALOR-CLAVE-LEN =
                    FUNCTION LENGTH(TB-VALOR-CLAVE-TEXT)
       *
@@ -379,16 +422,22 @@
                WHEN 100
                     DISPLAY 'ERROR: REG. NO ENCONTRADO EN BBDD'
                     DISPLAY 'PARRAFO: 2200-UPDATE-DAREPOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 2200-UPDATE-DAREPOS'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
@@ -397,6 +446,34 @@
            .
       *
        2200-UPDATE-DAREPOS-EXIT.
+           EXIT.
+      *
+      ******************************************************************
+      * 2300-ESCRIBIR-FSALIDA                                          *
+      ******************************************************************
+      *
+       2300-ESCRIBIR-FSALIDA.
+      *
+           WRITE REG-FSALIDA        FROM DATOS-AGR
+      *
+           IF FS-FSALIDA NOT = CT-00
+              DISPLAY 'ERROR AL ESCRIBIR FENTRADA'
+              DISPLAY 'PARRAFO: 2200-ESCRIBIR-FSALIDA'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA
+      *
+              PERFORM 2300-ESCRIBIR-FSALIDA
+                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
+      *
+              PERFORM 3000-FIN
+                 THRU 3000-FIN-EXIT
+           ELSE
+              INITIALIZE DATOS-AGR
+              ADD 1                  TO CN-REG-ESCRIT-FSALIDA
+           END-IF
+      *
+           .
+      *
+       2300-ESCRIBIR-FSALIDA-EXIT.
            EXIT.
       *
       ******************************************************************
@@ -429,12 +506,25 @@
        3100-CERRAR-FICHEROS.
       *
            CLOSE FENTRADA
+           CLOSE FSALIDA
       *
-           IF FS-FENTRADA NOT = '00'
+           IF FS-FENTRADA NOT = CT-00
               DISPLAY 'ERROR AL CERRAR EL FICHERO FENTRADA'
               DISPLAY 'PARRAFO: 3100-CERRAR-FICHEROS'
               DISPLAY 'NOMBRE FICHERO: FENTRADA'
               DISPLAY 'FILE STATUS: ' FS-FENTRADA
+      *
+              PERFORM 2300-ESCRIBIR-FSALIDA
+                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
+           END-IF
+      *
+           IF FS-FSALIDA NOT = CT-00
+              DISPLAY 'ERROR AL CERRAR FSALIDA'
+              DISPLAY 'PARRAFO: 3100-CERRAR-FICHEROS'
+              DISPLAY 'FILE STATUS: ' FS-FSALIDA
+      *
+              PERFORM 2300-ESCRIBIR-FSALIDA
+                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
            END-IF
       *
            .
@@ -450,12 +540,13 @@
       *
        3200-MOSTRAR-ESTADISTICAS.
       *
-           DISPLAY '*******************************'
-           DISPLAY '**D A T O S   P G M R E P O S**'
-           DISPLAY '*******************************'
-           DISPLAY '*REG.LEIDOS FENTRADA: 'CN-REG-LEIDOS-FENTRADA '   '
-                   '  *'
-           DISPLAY '*******************************'
+           DISPLAY '***************************'
+           DISPLAY '* E S T A D I S T I C A S *'
+           DISPLAY '***************************'
+           DISPLAY '*REG.LEIDOS FENTRADA:     *'CN-REG-LEIDOS-FENTRADA
+           DISPLAY '*REG.LEIDOS  FSALIDA:     *'CN-REG-ESCRIT-FSALIDA
+           DISPLAY '*REG.INSERTADOS BASE:     *'CN-REG-INSERT-BASE
+           DISPLAY '***************************'
       *
            .
       *
@@ -470,13 +561,13 @@
       *
        9000-LEER-FENTRADA.
       *
-           READ FENTRADA INTO CPY-CPYEREPO
+           READ FENTRADA INTO DATOS-AGR
       *
            EVALUATE FS-FENTRADA
-               WHEN '00'
-                    ADD 1               TO CN-REG-LEIDOS-FENTRADA
-               WHEN '10'
-                    SET SW-SI-FIN-FENTRADA     TO TRUE
+               WHEN CT-00
+                    ADD 1                    TO CN-REG-LEIDOS-FENTRADA
+               WHEN CT-10
+                    SET SW-SI-FIN-FENTRADA   TO TRUE
       *
                     PERFORM 9100-UPDATE-DAREPOS-OK
                        THRU 9100-UPDATE-DAREPOS-OK-EXIT
@@ -485,6 +576,9 @@
                     DISPLAY 'PARRAFO: 9000-LEER-FENTRADA'
                     DISPLAY 'NOMBRE FICHERO: FENTRADA'
                     DISPLAY 'FILE STATUS: ' FS-FENTRADA
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
@@ -520,16 +614,22 @@
                WHEN 100
                     DISPLAY 'ERROR: REG. NO ENCONTRADO EN BBDD'
                     DISPLAY 'PARRAFO: 9100-UPDATE-DAREPOS-OK'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
                WHEN OTHER
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 9100-UPDATE-DAREPOS-OK'
-                    DISPLAY 'TABLA: EMPLEADOS'
+                    DISPLAY 'TABLA: ' DAREPOS
                     DISPLAY 'SQLCODE: ' SQLCODE
+      *
+                    PERFORM 2300-ESCRIBIR-FSALIDA
+                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT

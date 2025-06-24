@@ -1,3 +1,4 @@
+      * LENGTH:  744
        01 DATOS-CLI-M.
            05 DNI-CLI-M            PIC X(9).
            05 NOMBRE-CLI-M         PIC X(75).

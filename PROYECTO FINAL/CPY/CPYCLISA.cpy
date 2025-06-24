@@ -1,3 +1,4 @@
+      * LENGTH:  713
        01  CPYCLISA.
            05  DNI-CL-S                      PIC X(9).
            05  NOMBRE-CL-S                   PIC X(25).
