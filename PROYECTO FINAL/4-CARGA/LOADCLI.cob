@@ -219,6 +219,7 @@
                              DISPLAY 'ERROR: ESTADO INCORRECTO EN DAREP'
                              DISPLAY 'PARRAFO: 1200-CONSULTAR-DAREPOS'
                              DISPLAY 'TABLA: ' DAREPOS
+                             DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                              PERFORM 2300-ESCRIBIR-FSALIDA
                                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -236,7 +237,7 @@
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 1200-CONSULTAR-DAREPOS'
                     DISPLAY 'TABLA: ' DAREPOS
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -280,7 +281,7 @@
                     DISPLAY 'ERROR: REG. DUPLICADO EN BBDD'
                     DISPLAY 'PARRAFO: 1210-INSERTAR-DAREPOS'
                     DISPLAY 'TABLA: ' DAREPOS
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -291,7 +292,7 @@
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 1210-INSERTAR-DAREPOS'
                     DISPLAY 'TABLA: ' DAREPOS
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -362,7 +363,7 @@
                     DISPLAY 'ERROR: REG. DUPLICADO EN BBDD'
                     DISPLAY 'PARRAFO: 2100-INSERT-CLIENTES'
                     DISPLAY 'TABLA: ' TABLA
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                 PERFORM 2300-ESCRIBIR-FSALIDA
                    THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -373,7 +374,7 @@
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 2100-INSERT-CLIENTES'
                     DISPLAY 'TABLA: ' TABLA
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -416,7 +417,7 @@
                     DISPLAY 'ERROR: REG. NO ENCONTRADO EN BBDD'
                     DISPLAY 'PARRAFO: 2200-UPDATE-DAREPOS'
                     DISPLAY 'TABLA: ' DAREPOS
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -427,7 +428,7 @@
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 2200-UPDATE-DAREPOS'
                     DISPLAY 'TABLA: ' DAREPOS
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -608,7 +609,7 @@
                     DISPLAY 'ERROR: REG. NO ENCONTRADO EN BBDD'
                     DISPLAY 'PARRAFO: 9100-UPDATE-DAREPOS-OK'
                     DISPLAY 'TABLA: ' DAREPOS
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
@@ -619,7 +620,7 @@
                     DISPLAY 'ERROR: ERROR TECNICO EN BBDD'
                     DISPLAY 'PARRAFO: 9100-UPDATE-DAREPOS-OK'
                     DISPLAY 'TABLA: ' DAREPOS
-                    DISPLAY 'SQLCODE: ' SQLCODE
+                    DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
                     PERFORM 2300-ESCRIBIR-FSALIDA
                        THRU 2300-ESCRIBIR-FSALIDA-EXIT
