@@ -18,7 +18,7 @@
 //SORTOUT  DD DSN=DES.TRANS.VIDA.MAP.F300519.OR,
 //            DISP=(NEW,CATLG,DELETE),SPACE=(TRK,(1,1))
 //SYSIN    DD *
- SORT FIELDS=(01,20,CH,A)
+ SORT FIELDS=(01,9,CH,A)
 /*
 //*---------------------------------------------------------------------
 //EJECUTA  EXEC PGM=IKJEFT01
