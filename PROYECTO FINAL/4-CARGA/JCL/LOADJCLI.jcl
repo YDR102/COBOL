@@ -7,6 +7,7 @@
 //SYSPRINT DD   SYSOUT=*
 //SYSIN    DD   *
  DELETE DES.TRANS.CLI.MAP.F300519.OR
+ DELETE DES.TRANS.CLI.MAP.F300519.ERR
  SET MAXCC=0
 /*
 //*---------------------------------------------------------------------
@@ -22,6 +23,9 @@
 //*---------------------------------------------------------------------
 //EJECUTA  EXEC PGM=IKJEFT01
 //FENTRADA DD DSN=DES.TRANS.CLI.MAP.F300519.OR,DISP=SHR
+//FSALIDA  DD DSN=DES.TRANS.CLI.MAP.F300519.ERR,
+//            DISP=(,CATLG,DELETE),
+//            SPACE=(TRK,(5,5),RLSE)
 //SYSOUT   DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
 //SYSTSPRT DD SYSOUT=*
