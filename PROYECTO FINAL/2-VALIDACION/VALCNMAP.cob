@@ -106,6 +106,8 @@
       *
       ******************************************************************
       * 1000-INICIO                                                    *
+      * INICIALIZAR VARIABLES                                          *
+      * APERTURA DE FICHEROS                                           *
       ******************************************************************
       *
        1000-INICIO.
@@ -134,6 +136,8 @@
       *
       ******************************************************************
       * 1100-ABRIR-FICHEROS                                            *
+      *  ABRIMOS LOS FICHEROS DE ENTRADA Y SALIDA COMPROBANDO SU       *
+      *  FILE STATUS.                                                  *
       ******************************************************************
       *
        1100-ABRIR-FICHEROS.
@@ -186,6 +190,12 @@
       *
       ******************************************************************
       * 2000-PROCESO                                                   *
+      * COMPARA LAS CLAVES DE LOS DOS FICHEROS DE ENTRADA.             *
+      * SI SON IGUALES, ESCRIBE EL REGISTRO EN DESCARTE Y              *
+      * LEE EL SIGUIENTE DE ENTRADA2. SI CLAVE1 ES MENOR QUE CLAVE2,   *
+      * MUESTRA MENSAJE Y LEE EL SIGUIENTE DE ENTRADA1. SI CLAVE2 ES   *
+      * MENOR QUE CLAVE1, MUESTRA MENSAJE, ESCRIBE EL REGISTRO         *
+      * EN FSALIDA Y LEE EL SIGUIENTE DE ENTRADA2.                     *
       ******************************************************************
       *
        2000-PROCESO.
@@ -220,6 +230,8 @@
       *
       ******************************************************************
       * 2100-ESCRIBIR-FSALIDA                                          *
+      * ESCRIBE EL REGISTRO EN FSALIDA, CONTROLA ERRORES,              *
+      * INICIALIZA DATOS Y ACTUALIZA EL CONTADOR DE REGISTROS          *
       ******************************************************************
       *
        2100-ESCRIBIR-FSALIDA.
@@ -245,6 +257,8 @@
       *
       ******************************************************************
       * 2200-ESCRIBIR-DESCARTE                                         *
+      * ESCRIBE EL REGISTRO EN DESCARTE, CONTROLA ERRORES,             *
+      * INICIALIZA DATOS Y ACTUALIZA EL CONTADOR.                      *
       ******************************************************************
       *
        2200-ESCRIBIR-DESCARTE.
@@ -270,6 +284,7 @@
       *
       ******************************************************************
       * 3000-FIN                                                       *
+      * CIERRA LOS FICHEROS, MUESTRA ESTADISTICAS Y FINALIZA           *
       ******************************************************************
       *
        3000-FIN.
@@ -348,6 +363,8 @@
       *
       ******************************************************************
       * 9000-LEER-ENTRADA1                                             *
+      * LEE REGISTRO DEL FICHERO DE ENTRADA 1,                         *
+      * ACTUALIZA CONTADOR Y CONTROLA FIN O                            *
       ******************************************************************
       *
        9000-LEER-ENTRADA1.
@@ -377,6 +394,8 @@
       *
       ******************************************************************
       * 9100-LEER-ENTRADA2                                             *
+      * LEE REGISTRO DEL FICHERO DE ENTRADA 2,                         *
+      * ACTUALIZA CONTADOR Y CONTROLA FIN O                            *
       ******************************************************************
       *
        9100-LEER-ENTRADA2.

@@ -2,7 +2,7 @@
       *
        PROGRAM-ID.   EXTCLI.
        AUTHOR.       DAVID.
-       DATE-WRITTEN. 29/02/2025.
+       DATE-WRITTEN. 12/05/2025.
        DATE-COMPILED.
       *
       ******************************************************************
@@ -95,6 +95,8 @@
       *
       ******************************************************************
       *     1000-INICIO                                                *
+      * INICIALIZAR VARIABLES                                          *
+      * APERTURA DE FICHEROS                                           *
       ******************************************************************
        1000-INICIO.
       *
@@ -117,6 +119,7 @@
       *
       ******************************************************************
       *     1100-ABRIR-SALIDA                                          *
+      *  ABRIMOS EL FICHERO Y SALIDA COMPROBANDO SU FILE STATUS.       *
       ******************************************************************
        1100-ABRIR-SALIDA.
       *
@@ -137,14 +140,19 @@
       *
       ******************************************************************
       *     2000-PROCESO                                               *
+      * LLAMA A UNA RUTINA EXTERNA PARA OBTENER UN BLOQUE              *
+      * DE CLIENTES Y LOS GUARDA EN UNA TABLA. DESPUES RECORRE LA TABLA*
+      * DE CLIENTES RECUPERADOS, FORMATEA CADA REGISTRO Y              *
+      * LO ESCRIBE EN EL FICHERO DE SALIDA. ACTUALIZA CONTADORES       *
+      * DE REGISTROS, CONTROLA ERRORES Y CAMBIA EL ESTADO PARA         *
       ******************************************************************
        2000-PROCESO.
       *
-           PERFORM 2400-LLAMAR-RUTINA
-              THRU 2400-LLAMAR-RUTINA-EXIT
+           PERFORM 2100-LLAMAR-RUTINA
+              THRU 2100-LLAMAR-RUTINA-EXIT
       *
-           PERFORM 2450-INFORMAR-SALIDA
-              THRU 2450-INFORMAR-SALIDA-EXIT
+           PERFORM 2200-INFORMAR-SALIDA
+              THRU 2200-INFORMAR-SALIDA-EXIT
       *
            MOVE CA-R          TO OPCION
       *
@@ -153,9 +161,11 @@
            EXIT.
       *
       ******************************************************************
-      *     2400-LLAMAR-RUTINA                                         *
+      *     2100-LLAMAR-RUTINA                                         *
+      * LLAMA A LA RUTINA EXTRCLI PARA OBTENER CLIENTES Y ACTUALIZA    *
+      * CONTADORES O GRABA ERROR SEGUN EL RETORNO DE LA RUTINA.        *
       * ****************************************************************
-       2400-LLAMAR-RUTINA.
+       2100-LLAMAR-RUTINA.
       *
            DISPLAY 'CALL A LA RUTINA'
            DISPLAY ENTRADA
@@ -175,30 +185,38 @@
            END-EVALUATE
       *
            .
-       2400-LLAMAR-RUTINA-EXIT.
+       2100-LLAMAR-RUTINA-EXIT.
            EXIT.
       *
       ******************************************************************
-      *     2450-INFORMAR-SALIDA                                       *
+      *     2200-INFORMAR-SALIDA                                       *
+      * RECORRE LA TABLA DE CLIENTES RECUPERADOS Y PARA CADA UNO LLAMA
+      * AL PARRAFO 2300-ESCRIBIR-SALIDA PARA FORMATEAR Y ESCRIBIR
+      * EL REGISTRO EN EL FICHERO DE SALIDA
       ******************************************************************
-       2450-INFORMAR-SALIDA.
+       2200-INFORMAR-SALIDA.
       *
            INITIALIZE CPYCLISA
       *
            PERFORM VARYING IND FROM 1 BY 1
                 UNTIL IND > NUM-ELEM-S
-                 PERFORM 2500-ESCRIBIR-SALIDA
-                     THRU 2500-ESCRIBIR-SALIDA-EXIT
+                 PERFORM 2300-ESCRIBIR-SALIDA
+                     THRU 2300-ESCRIBIR-SALIDA-EXIT
            END-PERFORM
       *
            .
-       2450-INFORMAR-SALIDA-EXIT.
+       2200-INFORMAR-SALIDA-EXIT.
            EXIT.
       *
       ******************************************************************
-      *     2500-ESCRIBIR-SALIDA                                       *
+      *     2300-ESCRIBIR-SALIDA                                       *
+      * ESCRIBE UN REGISTRO DE CLIENTE EN FSALIDA TOMANDO              *
+      * LOS DATOS DE LA TABLA SALIDA-TB(IND). SI HAY ERROR AL ESCRIBIR,*
+      * MUESTRA MENSAJE, MARCA EL ERROR Y FINALIZA EL PROGRAMA.        *
+      * SI LA ESCRITURA ES CORRECTA, INICIALIZA LA ESTRUCTURA DE SALIDA*
+      * Y ACTUALIZA EL CONTADOR DE REGISTROS                           *
       ******************************************************************
-       2500-ESCRIBIR-SALIDA.
+       2300-ESCRIBIR-SALIDA.
       *
            MOVE SALIDA-TB(IND)    TO CPYCLISA
       *
@@ -219,10 +237,11 @@
            END-IF
       *
            .
-       2500-ESCRIBIR-SALIDA-EXIT.
+       2300-ESCRIBIR-SALIDA-EXIT.
            EXIT.
       ******************************************************************
       *     3000-FIN                                                   *
+      * CIERRA LOS FICHEROS, MUESTRA ESTADISTICAS Y FINALIZA           *
       ******************************************************************
        3000-FIN.
       *

@@ -124,6 +124,8 @@
       *
       ******************************************************************
       * 1000-INICIO                                                    *
+      * INICIALIZAR VARIABLES                                          *
+      * APERTURA DE FICHEROS                                           *
       ******************************************************************
       *
        1000-INICIO.
@@ -150,6 +152,8 @@
       *
       ******************************************************************
       * 1100-ABRIR-FICHEROS                                            *
+      *  ABRIMOS LOS FICHEROS DE ENTRADA Y SALIDA COMPROBANDO SU       *
+      *  FILE STATUS.                                                  *
       ******************************************************************
       *
        1100-ABRIR-FICHEROS.
@@ -202,6 +206,8 @@
       *
       ******************************************************************
       * 2000-PROCESO                                                   *
+      * EVALUAMOS EL TIPO SEGURO Y LO INFORMAMOS COMPROBAMOS           *
+      * QUE LA DIVISA ES LA CORRECTA Y LO ESCRIBIMOS                   *
       ******************************************************************
       *
        2000-PROCESO.
@@ -255,6 +261,9 @@
       *
       ******************************************************************
       * 2100-INFORMAR-SALIDA-1      -- VIDA --                         *
+      * ESTE PARRAFO EXTRAE Y FORMATEA LOS DATOS DEL SEGURO DE VIDA    *
+      * DEL REGISTRO DE ENTRADA. SEPARA LA PRIMA, EDAD Y COBERTURAS,   *
+      * LAS UNE Y LAS ASIGNA A LOS CAMPOS DE SALIDA PARA SU POSTERIOR  *
       ******************************************************************
       *
        2100-INFORMAR-SALIDA-1.
@@ -300,6 +309,7 @@
       *
       ******************************************************************
       * 2150-ESCRIBIR-FSALIDA-1                                        *
+      * ESCRIBE EL REGISTRO DE VIDA EN FSALIDA1 Y SI FALLA             *
       ******************************************************************
       *
        2150-ESCRIBIR-FSALIDA-1.
@@ -326,6 +336,7 @@
       *
       ******************************************************************
       * 2200-INFORMAR-SALIDA-2          -- AUTO --                     *
+      * EXTRAE Y FORMATEA DATOS DE AUTO PARA FSALIDA2.                 *
       ******************************************************************
       *
        2200-INFORMAR-SALIDA-2.
@@ -375,6 +386,7 @@
       *
       ******************************************************************
       * 2250-ESCRIBIR-FSALIDA-2                                        *
+      * ESCRIBE EL REGISTRO DE AUTO EN FSALIDA2 Y SI FALLA             *
       ******************************************************************
       *
        2250-ESCRIBIR-FSALIDA-2.
@@ -401,6 +413,10 @@
       *
       ******************************************************************
       * 2300-INFORMAR-SALIDA-3              -- HOGAR --                *
+      * ESTE PARRAFO EXTRAE Y FORMATEA LOS DATOS DEL SEGURO            *
+      * DE HOGAR DEL REGISTRO DE ENTRADA, SEPARANDO PRIMA,             *
+      * CONTINENTE, CONTENIDO Y COBERTURAS,                            *
+      * Y LOS SIGNA A LOS CAMPOS DE SALIDA.                            *
       ******************************************************************
       *
        2300-INFORMAR-SALIDA-3.
@@ -455,6 +471,8 @@
       *
       ******************************************************************
       * 2350-ESCRIBIR-FSALIDA-3                                        *
+      * ESCRIBE EL REGISTRO DE HOGAR EN FSALIDA3                       *
+      * Y SI HAY ERROR MUESTRA MENSAJE                                 *
       ******************************************************************
       *
        2350-ESCRIBIR-FSALIDA-3.
@@ -480,8 +498,13 @@
            EXIT.
       *
       ******************************************************************
-      *     2400-LLAMAR-RUTINA                                         *
+      * 2400-LLAMAR-RUTINA                                             *
+      * ESTE PARRAFO LLAMA A UNA RUTINA EXTERNA DE CONTRAVALORACION    *
+      * DE DIVISAS. LA RUTINA SE ENCARGA DE CONVERTIR IMPORTES ENTRE   *
+      * DISTINTAS MONEDAS SEGUN EL TIPO DE SEGURO. DESPUES VERIFICA    *
+      * EL CODIGO DE RETORNO                                           *
       * ****************************************************************
+      *
        2400-LLAMAR-RUTINA.
       *
            DISPLAY 'CALL A LA RUTINA'
@@ -506,6 +529,7 @@
       *
       ******************************************************************
       * 3000-FIN                                                       *
+      * CIERRA LOS FICHEROS, MUESTRA ESTADISTICAS Y FINALIZA           *
       ******************************************************************
       *
        3000-FIN.
@@ -591,7 +615,9 @@
            EXIT.
       *
       ******************************************************************
-      * 9000-LEER-FENTRADA                                              *
+      * 9000-LEER-FENTRADA                                             *
+      * LEE UN REGISTRO DEL FICHERO DE ENTRADA,                        *
+      * ACTUALIZA CONTADOR Y CONTROLA FIN O                            *
       ******************************************************************
       *
        9000-LEER-FENTRADA.

@@ -1,7 +1,7 @@
 //LOADJCLI JOB NOTIFY=&SYSUID
 //JOBLIB   DD DSN=DSN810.SDSNLOAD,DISP=SHR
 //         DD DSN=IBMUSER.COBOL.LOAD,DISP=SHR
-//*---------------------------------------------------------------------
+//*-- BORRAR -----------------------------------------------------------
 //SUPRIME  EXEC PGM=IDCAMS
 //SYSOUT   DD SYSOUT=*
 //SYSPRINT DD   SYSOUT=*
@@ -10,7 +10,7 @@
  DELETE DES.TRANS.CLI.MAP.F300519.ERR
  SET MAXCC=0
 /*
-//*---------------------------------------------------------------------
+//*-- ORDENAR ----------------------------------------------------------
 //SORT01   EXEC PGM=SORT
 //SYSOUT   DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
@@ -20,7 +20,7 @@
 //SYSIN    DD *
  SORT FIELDS=(01,9,CH,A)
 /*
-//*---------------------------------------------------------------------
+//*-- EJECUTAR ---------------------------------------------------------
 //EJECUTA  EXEC PGM=IKJEFT01
 //FENTRADA DD DSN=DES.TRANS.CLI.MAP.F300519.OR,DISP=SHR
 //FSALIDA  DD DSN=DES.TRANS.CLI.MAP.F300519.ERR,

@@ -105,6 +105,8 @@
       *
       ******************************************************************
       * 1000-INICIO.                                                   *
+      * INICIALIZAR VARIABLES                                          *
+      * APERTURA DE FICHEROS                                           *
       ******************************************************************
       *
        1000-INICIO.
@@ -132,6 +134,7 @@
       *
       ******************************************************************
       * 1100-ABRIR-FICHEROS.                                           *
+      *  ABRIMOS EL FICHERO Y SALIDA COMPROBANDO SU FILE STATUS.       *
       ******************************************************************
       *
        1100-ABRIR-FICHEROS.
@@ -155,6 +158,9 @@
       *
       ******************************************************************
       *     1200-ABRIR-CURSOR                                          *
+      * ABRE EL CURSOR PARA LEER REGISTROS DE LA TABLA EN LA BASE      *
+      * DE DATOS. SI HAY ERROR AL ABRIR, GUARDA INFORMACION DEL        *
+      * ERROR Y FINALIZA EL PROGRAMA.                                  *
       ******************************************************************
        1200-ABRIR-CURSOR.
       *
@@ -186,6 +192,10 @@
       *
       ******************************************************************
       * 2000-PROCESO.                                                  *
+      * LLAMA AL PARRAFO 2200-ESCRIBIR-FSALIDA PARA ESCRIBIR.          *
+      * EL REGISTRO ACTUAL EN FSALIDA DESPUES LLAMA A                  *
+      * 9000-LEER-CURSOR PARA LEER EL SIGUIENTE REGISTRO               *
+      * DE LA BASE DE DATOS                                            *
       ******************************************************************
       *
        2000-PROCESO.
@@ -203,6 +213,10 @@
       *
       ******************************************************************
       * 2200-ESCRIBIR-FSALIDA.                                         *
+      * MUEVE LOS DATOS DEL REGISTRO ACTUAL DE LA TABLA A LA           *
+      * ESTRUCTURA DE SALIDA. ESCRIBE EL REGISTRO EN FSALIDA,          *
+      * CONTROLA ERRORES, INICIALIZA DATOS Y ACTUALIZA EL              *
+      * CONTADOR DE REGISTROS                                          *
       ******************************************************************
       *
        2200-ESCRIBIR-FSALIDA.
@@ -233,6 +247,7 @@
       *
       ******************************************************************
       * 3000-FIN.                                                      *
+      * CIERRA LOS FICHEROS Y CURSORES, MUESTRA ESTADISTICAS Y FINALIZA*
       ******************************************************************
       *
        3000-FIN.
@@ -275,6 +290,9 @@
       *
       ******************************************************************
       *     3200-CERRAR-CURSOR                                         *
+      * CIERRA EL CURSOR CUR-COMPANIAS-SEGUROS USADO PARA              *
+      * LEER LA TABLA EN LA BASE DE DATOS. SI HAY ERROR AL CERRAR,     *
+      * GUARDA INFORMACION DEL ERROR Y FINALIZA EL PROGRAMA.           *
       ******************************************************************
        3200-CERRAR-CURSOR.
       *
@@ -334,6 +352,9 @@
       *
       ******************************************************************
       *     9000-LEER-CURSOR                                           *
+      * LEE EL SIGUIENTE REGISTRO DE LA TABLA USANDO EL CURSOR.        *
+      * SI LLEGA AL FINAL, ACTIVA EL FIN DE CURSOR. SI HAY ERROR,      *
+      * GUARDA INFORMACION Y FINALIZA EL PROGRAMA.                     *
       ******************************************************************
        9000-LEER-CURSOR.
       *

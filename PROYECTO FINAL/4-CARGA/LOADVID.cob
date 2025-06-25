@@ -1,5 +1,5 @@
       ******************************************************************
-      ** P G M R E P O S.-PGM CON RESPOSICIONAMIENTO QUE LEE LOS      **
+      ** L O A D V I D.  -PGM CON RESPOSICIONAMIENTO QUE LEE LOS      **
       **                  REGISTROS DEL FICHERO DE ENTRADA CON INFO   **
       **                  DE VIDA Y LOS INSERTA POSTERIORMENTE        **
       **                  EN BBDD.                                    **
@@ -13,7 +13,7 @@
       *
        PROGRAM-ID. LOADVID.
        AUTHOR. DAVID.
-       DATE-WRITTEN. 06/06/2025.
+       DATE-WRITTEN. 20/06/2025.
       *
       ******************************************************************
       ** ENVIRONMENT DIVISION                                         **

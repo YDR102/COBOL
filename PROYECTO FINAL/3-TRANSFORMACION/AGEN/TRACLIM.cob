@@ -100,6 +100,8 @@
       *
       ******************************************************************
       * 1000-INICIO                                                    *
+      * INICIALIZAR VARIABLES                                          *
+      * APERTURA DE FICHEROS                                           *
       ******************************************************************
       *
        1000-INICIO.
@@ -123,6 +125,8 @@
       *
       ******************************************************************
       * 1100-ABRIR-FICHEROS                                            *
+      *  ABRIMOS LOS FICHEROS DE ENTRADA Y SALIDA COMPROBANDO SU       *
+      *  FILE STATUS.                                                  *
       ******************************************************************
       *
        1100-ABRIR-FICHEROS.
@@ -156,6 +160,8 @@
       *
       ******************************************************************
       * 2000-PROCESO                                                   *
+      * PROCESA CADA REGISTRO: GENERA Y ESCRIBE SALIDAS,               *
+      * LLAMA A LA RUTINA EXTERNA Y LEE EL SIGUIENTE REGISTRO.         *
       ******************************************************************
       *
        2000-PROCESO.
@@ -185,6 +191,8 @@
       *
       ******************************************************************
       * 2100-INFORMAR-SALIDA1                                          *
+      * UNE Y FORMATEA LOS DATOS DEL CLIENTE PARA PREPARAR             *
+      * EL REGISTRO DE SALIDA1.                                        *
       ******************************************************************
       *
        2100-INFORMAR-SALIDA1.
@@ -212,6 +220,8 @@
       *
       ******************************************************************
       * 2200-ESCRIBIR-FSALIDA1                                         *
+      * ESCRIBE EL REGISTRO DE CLIENTE EN FSALIDA1 Y                   *
+      * SI HAY ERROR MUESTRA MENSAJE Y FINALIZA EL PROGRAMA.           *
       ******************************************************************
       *
        2200-ESCRIBIR-FSALIDA1.
@@ -237,6 +247,8 @@
       *
       ******************************************************************
       * 2300-INFORMAR-SALIDA2                                          *
+      * COPIA Y FORMATEA LOS DATOS DEL AGENTE PARA PREPARAR EL         *
+      * REGISTRO DE SALIDA2.                                           *
       ******************************************************************
       *
        2300-INFORMAR-SALIDA2.
@@ -256,6 +268,8 @@
       *
       ******************************************************************
       * 2400-ESCRIBIR-FSALIDA2                                         *
+      * ESCRIBE EL REGISTRO DEL AGENTE EN FSALIDA2 Y                   *
+      * SI HAY ERROR MUESTRA MENSAJE Y FINALIZA.                       *
       ******************************************************************
       *
        2400-ESCRIBIR-FSALIDA2.
@@ -280,7 +294,9 @@
            EXIT.
       *
       ******************************************************************
-      *     2500-LLAMAR-RUTINA                                         *
+      * 2500-LLAMAR-RUTINA                                             *
+      * LLAMA A UNA RUTINA EXTERNA PARA OBTENER DATOS DEL AGENTE SEGUN *
+      * EL DNI Y CONTROLA EL CODIGO DE RETORNO.                        *
       * ****************************************************************
        2500-LLAMAR-RUTINA.
       *
@@ -312,6 +328,7 @@
       *
       ******************************************************************
       * 3000-FIN                                                       *
+      * CIERRA LOS FICHEROS, MUESTRA ESTADISTICAS Y FINALIZA           *
       ******************************************************************
       *
        3000-FIN.
@@ -373,6 +390,8 @@
       *
       ******************************************************************
       * 9000-LEER-FENTRADA                                             *
+      * LEE UN REGISTRO DEL FICHERO DE ENTRADA,                        *
+      * ACTUALIZA CONTADOR Y CONTROLA FIN O                            *
       ******************************************************************
       *
        9000-LEER-FENTRADA.

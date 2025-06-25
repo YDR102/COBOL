@@ -1,5 +1,5 @@
       ******************************************************************
-      ** P G M R E P O S.-PGM CON RESPOSICIONAMIENTO QUE LEE LOS      **
+      ** L O A D A G E.  -PGM CON RESPOSICIONAMIENTO QUE LEE LOS      **
       **                  REGISTROS DEL FICHERO DE ENTRADA CON INFO   **
       **                  DE AGENTES Y LOS INSERTA POSTERIORMENTE     **
       **                  EN BBDD.                                    **

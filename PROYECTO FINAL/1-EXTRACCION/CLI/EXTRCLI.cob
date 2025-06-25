@@ -110,6 +110,8 @@
       *
       ******************************************************************
       *     1000-INICIO                                                *
+      * INICIALIZAR VARIABLES                                          *
+      * APERTURA DE FICHEROS                                           *
       ******************************************************************
        1000-INICIO.
       *
@@ -136,6 +138,7 @@
       *
       ******************************************************************
       *     1100-VALIDAR-OPCION                                        *
+      * VALIDACION DE LA OPCION DE EXTRACCION                          *
       ******************************************************************
        1100-VALIDAR-OPCION.
       *
@@ -160,6 +163,7 @@
       *
       ******************************************************************
       *     1200-VALIDAR-NUM-ELEM-E                                    *
+      * VALIDACION DEL NUMERO DE ELEMENTOS A EXTRAER                   *
       ******************************************************************
        1200-VALIDAR-NUM-ELEM-E.
       *
@@ -197,6 +201,9 @@
       *
       ******************************************************************
       *     2000-PROCESO                                               *
+      * DEPENDIENDO DE LA OPCION SE HACE UN FETCH AL CURSOR MOVIENDO   *
+      * ESPACIOS AL CAMPO CLAVE DEL REGISTRO, O EL LA CLAVE            *
+      * REPOSICIONADA                                                  *
       ******************************************************************
        2000-PROCESO.
       *
@@ -240,7 +247,10 @@
            EXIT.
       *
       ******************************************************************
-      *     2100-ABRIR-CURSOR-LISTREG                                   *
+      *     2100-ABRIR-CURSOR-LISTREG                                  *
+      * ABRE EL CURSOR PARA LEER REGISTROS DE LA TABLA EN LA BASE      *
+      * DE DATOS. SI HAY ERROR AL ABRIR, GUARDA INFORMACION DEL        *
+      * ERROR Y FINALIZA EL PROGRAMA.                                  *
       ******************************************************************
        2100-ABRIR-CURSOR-LISTREG.
       *
@@ -274,6 +284,9 @@
       *
       ******************************************************************
       *     2200-LEER-CURSOR-LISTREG                                   *
+      * LEE EL SIGUIENTE REGISTRO DE LA TABLA USANDO EL CURSOR.        *
+      * SI LLEGA AL FINAL, ACTIVA EL FIN DE CURSOR. SI HAY ERROR,      *
+      * GUARDA INFORMACION Y FINALIZA EL PROGRAMA.                     *
       ******************************************************************
        2200-LEER-CURSOR-LISTREG.
       *
@@ -321,7 +334,10 @@
            EXIT.
       *
       ******************************************************************
-      *     2300-CERR-CURSOR-LISTREG                                 *
+      *     2300-CERR-CURSOR-LISTREG                                   *
+      * CIERRA EL CURSOR CUR-COMPANIAS-SEGUROS USADO PARA              *
+      * LEER LA TABLA EN LA BASE DE DATOS. SI HAY ERROR AL CERRAR,     *
+      * GUARDA INFORMACION DEL ERROR Y FINALIZA EL PROGRAMA.           *
       ******************************************************************
        2300-CERR-CURSOR-LISTREG.
       *
@@ -352,6 +368,7 @@
       *
       ******************************************************************
       *     2250-INFORMAR-SALIDA                                       *
+      * INFORMA LOS DATOS LEIDOS DEL CURSOR EN EL OCCURS DE SALIDA     *
       ******************************************************************
        2250-INFORMAR-SALIDA.
       *
@@ -380,6 +397,8 @@
       *
       ******************************************************************
       *     3000-FIN                                                   *
+      * DEVOLVIENDO EL CONTROL AL PROGRAMA LLAMANTE, SI HAY ERRORES,   *
+      * SE MUESTRA UN MENSAJE DE ERROR Y SE TERMINA EL PROGRAMA.       *
       ******************************************************************
        3000-FIN.
       *
