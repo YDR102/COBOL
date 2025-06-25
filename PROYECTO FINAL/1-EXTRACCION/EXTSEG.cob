@@ -204,8 +204,8 @@
       *
        2000-PROCESO.
       *
-           PERFORM 2200-ESCRIBIR-FSALIDA
-              THRU 2200-ESCRIBIR-FSALIDA-EXIT
+           PERFORM 2100-ESCRIBIR-FSALIDA
+              THRU 2100-ESCRIBIR-FSALIDA-EXIT
 
            PERFORM 9000-LEER-CURSOR
               THRU 9000-LEER-CURSOR-EXIT
@@ -216,14 +216,14 @@
            EXIT.
       *
       ******************************************************************
-      * 2200-ESCRIBIR-FSALIDA.                                         *
+      * 2100-ESCRIBIR-FSALIDA.                                         *
       * MUEVE LOS DATOS DEL REGISTRO ACTUAL DE LA TABLA A LA           *
       * ESTRUCTURA DE SALIDA. ESCRIBE EL REGISTRO EN FSALIDA,          *
       * CONTROLA ERRORES, INICIALIZA DATOS Y ACTUALIZA EL              *
       * CONTADOR DE REGISTROS                                          *
       ******************************************************************
       *
-       2200-ESCRIBIR-FSALIDA.
+       2100-ESCRIBIR-FSALIDA.
       *
            MOVE TB-NUMERO-POLIZA      TO NUMERO-POLIZA-SEG
            MOVE TB-TIPO               TO TIPO-SEG
@@ -250,7 +250,7 @@
       *
            .
       *
-       2200-ESCRIBIR-FSALIDA-EXIT.
+       2100-ESCRIBIR-FSALIDA-EXIT.
            EXIT.
       *
       ******************************************************************

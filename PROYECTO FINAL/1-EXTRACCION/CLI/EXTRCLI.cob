@@ -309,8 +309,8 @@
               WHEN 0
                    ADD 1 TO CONT-LEIDOS
                    IF CONT-LEIDOS <= NUM-ELEM-E
-                      PERFORM 2250-INFORMAR-SALIDA
-                         THRU 2250-INFORMAR-SALIDA-EXIT
+                      PERFORM 2400-INFORMAR-SALIDA
+                         THRU 2400-INFORMAR-SALIDA-EXIT
                    END-IF
               WHEN 100
                    SET SI-FIN-CURSOR                  TO TRUE
@@ -367,10 +367,10 @@
            EXIT.
       *
       ******************************************************************
-      *     2250-INFORMAR-SALIDA                                       *
+      *     2400-INFORMAR-SALIDA                                       *
       * INFORMA LOS DATOS LEIDOS DEL CURSOR EN EL OCCURS DE SALIDA     *
       ******************************************************************
-       2250-INFORMAR-SALIDA.
+       2400-INFORMAR-SALIDA.
       *
       *-- INFORMAR EL OCCURS DE SALIDA CON LOS DATOS DEL FETCH
 
@@ -392,7 +392,7 @@
       *
            .
       *
-       2250-INFORMAR-SALIDA-EXIT.
+       2400-INFORMAR-SALIDA-EXIT.
            EXIT.
       *
       ******************************************************************

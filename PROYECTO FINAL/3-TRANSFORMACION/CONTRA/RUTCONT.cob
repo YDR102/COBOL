@@ -85,8 +85,8 @@
            MOVE CT-00 TO COD-RETORNO
 
       *
-           PERFORM 1200-INF-TABLA-WORKING
-              THRU 1200-INF-TABLA-WORKING-EXIT
+           PERFORM 1100-INF-TABLA-WORKING
+              THRU 1100-INF-TABLA-WORKING-EXIT
       *
            .
       *
@@ -99,7 +99,7 @@
       ** PRODUCTOS.                                                   **
       ******************************************************************
       *
-       1200-INF-TABLA-WORKING.
+       1100-INF-TABLA-WORKING.
       *
            MOVE 'USD'                  TO TB-DIVISA(1)
            MOVE 'US DOLLAR'            TO TB-NOM-DIVISA(1)
@@ -135,7 +135,7 @@
       *
            .
       *
-       1200-INF-TABLA-WORKING-EXIT.
+       1100-INF-TABLA-WORKING-EXIT.
            EXIT.
       *
       ******************************************************************

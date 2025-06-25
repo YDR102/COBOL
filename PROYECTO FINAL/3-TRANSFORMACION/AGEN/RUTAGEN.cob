@@ -119,20 +119,20 @@
       ******************************************************************
        2000-PROCESO.
       *
-               PERFORM 2200-INFORMAR-TABLA
-                  THRU 2200-INFORMAR-TABLA-EXIT
+               PERFORM 2100-INFORMAR-TABLA
+                  THRU 2100-INFORMAR-TABLA-EXIT
       *
-               PERFORM 2300-INFORMAR-SALIDA
-                  THRU 2300-INFORMAR-SALIDA-EXIT
+               PERFORM 2200-INFORMAR-SALIDA
+                  THRU 2200-INFORMAR-SALIDA-EXIT
       *
            .
        2000-PROCESO-EXIT.
            EXIT.
       *
       ******************************************************************
-      *     2200-INFORMAR-TABLA                                        *
+      *     2100-INFORMAR-TABLA                                        *
       ******************************************************************
-       2200-INFORMAR-TABLA.
+       2100-INFORMAR-TABLA.
       *
 
             MOVE '1'           TO NUM-AGE-RUT(1)
@@ -200,13 +200,13 @@
       *
            .
       *
-       2200-INFORMAR-TABLA-EXIT.
+       2100-INFORMAR-TABLA-EXIT.
            EXIT.
       *
       ******************************************************************
-      *     2300-INFORMAR-SALIDA                                       *
+      *     2200-INFORMAR-SALIDA                                       *
       ******************************************************************
-       2300-INFORMAR-SALIDA.
+       2200-INFORMAR-SALIDA.
       *
             MOVE NUM-AGE-RUT    (NUMERO-ALEA) TO NUM-RUT
             MOVE DNI-AGE-RUT    (NUMERO-ALEA) TO DNI-RUT
@@ -223,7 +223,7 @@
             DISPLAY 'TELEFONO AGR: ' TLF-RUT
       *
            .
-       2300-INFORMAR-SALIDA-EXIT.
+       2200-INFORMAR-SALIDA-EXIT.
            EXIT.
       *
       ******************************************************************
