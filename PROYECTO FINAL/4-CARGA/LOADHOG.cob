@@ -156,9 +156,6 @@
               DISPLAY 'NOMBRE FICHERO: FENTRADA'
               DISPLAY 'FILE STATUS: ' FS-FENTRADA
       *
-              PERFORM 2300-ESCRIBIR-FSALIDA
-                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
-      *
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            END-IF
@@ -167,9 +164,6 @@
               DISPLAY 'ERROR AL ABRIR FSALIDA'
               DISPLAY 'PARRAFO: 1100-ABRIR-FICHEROS'
               DISPLAY 'FILE STATUS: ' FS-FSALIDA
-      *
-              PERFORM 2300-ESCRIBIR-FSALIDA
-                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
@@ -222,9 +216,6 @@
                              MOVE SQLCODE TO WK-SQLCODE
                              DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
-                             PERFORM 2300-ESCRIBIR-FSALIDA
-                                THRU 2300-ESCRIBIR-FSALIDA-EXIT
-      *
                              PERFORM 3000-FIN
                                 THRU 3000-FIN-EXIT
                     END-EVALUATE
@@ -239,9 +230,6 @@
                     DISPLAY 'PARRAFO: 1200-CONSULTAR-DAREPOS'
                     DISPLAY 'TABLA: DAREPOS'
                     DISPLAY 'SQLCODE: ' WK-SQLCODE
-      *
-                    PERFORM 2300-ESCRIBIR-FSALIDA
-                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
@@ -285,9 +273,6 @@
                     MOVE SQLCODE TO WK-SQLCODE
                     DISPLAY 'SQLCODE: ' WK-SQLCODE
       *
-                    PERFORM 2300-ESCRIBIR-FSALIDA
-                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
-      *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
                WHEN OTHER
@@ -296,9 +281,6 @@
                     DISPLAY 'TABLA: DAREPOS'
                     MOVE SQLCODE TO WK-SQLCODE
                     DISPLAY 'SQLCODE: ' WK-SQLCODE
-      *
-                    PERFORM 2300-ESCRIBIR-FSALIDA
-                       THRU 2300-ESCRIBIR-FSALIDA-EXIT
       *
                     PERFORM 3000-FIN
                        THRU 3000-FIN-EXIT
@@ -347,6 +329,9 @@
            MOVE COBERTURAS-HOG              TO TB-COBERTURAS-TEXT
            MOVE FECHA-INICIO-HOG            TO TB-FECHA-INICIO
            MOVE FECHA-VENCIMIENTO-HOG       TO TB-FECHA-VENCIMIENTO
+
+           COMPUTE TB-COBERTURAS-LEN =
+                   FUNCTION LENGTH(TB-COBERTURAS-TEXT)
       *
            EXEC SQL
                INSERT INTO HOGAR_MAPFRE
@@ -470,9 +455,6 @@
               DISPLAY 'PARRAFO: 2200-ESCRIBIR-FSALIDA'
               DISPLAY 'FILE STATUS: ' FS-FSALIDA
       *
-              PERFORM 2300-ESCRIBIR-FSALIDA
-                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
-      *
               PERFORM 3000-FIN
                  THRU 3000-FIN-EXIT
            ELSE
@@ -522,18 +504,12 @@
               DISPLAY 'PARRAFO: 3100-CERRAR-FICHEROS'
               DISPLAY 'NOMBRE FICHERO: FENTRADA'
               DISPLAY 'FILE STATUS: ' FS-FENTRADA
-      *
-              PERFORM 2300-ESCRIBIR-FSALIDA
-                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
            END-IF
       *
            IF FS-FSALIDA NOT = CT-00
               DISPLAY 'ERROR AL CERRAR FSALIDA'
               DISPLAY 'PARRAFO: 3100-CERRAR-FICHEROS'
               DISPLAY 'FILE STATUS: ' FS-FSALIDA
-      *
-              PERFORM 2300-ESCRIBIR-FSALIDA
-                 THRU 2300-ESCRIBIR-FSALIDA-EXIT
            END-IF
       *
            .
